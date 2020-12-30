@@ -1,10 +1,9 @@
-﻿using System;
-using Crude.Models.Fragments;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+using System;
 
 namespace Crude.Models.LayoutFragments
 {
-    internal class TableFragment<T> : ICrudeFragment where T : class
+    internal class TableFragment<T> : ICrudeLayoutFragment where T : class
     {
         private readonly CrudeTable<T> _table;
 
@@ -58,7 +57,7 @@ namespace Crude.Models.LayoutFragments
                     var fragment = CrudeFragmentFactory.Create(item);
 
                     builder.OpenElement(seq++, "td");
-                    builder.AddContent(seq++, fragment.Render(context));
+                    builder.AddContent(seq++, fragment.RenderValue(context));
                     builder.CloseElement();
                 }
 

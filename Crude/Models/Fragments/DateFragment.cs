@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Crude.Models.Fragments
 {
-    internal class DateFragment : ICrudeFragment
+    internal class DateFragment : ICrudeValueFragment
     {
         private readonly DateTime _value;
 
@@ -12,7 +12,12 @@ namespace Crude.Models.Fragments
             _value = value;
         }
 
-        public RenderFragment Render(RenderContext context) => builder =>
+        public RenderFragment RenderForm(RenderContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public RenderFragment RenderValue(RenderContext context) => builder =>
         {
             builder.AddContent(0, _value.ToString(context.Formatter));
         };

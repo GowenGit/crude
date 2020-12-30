@@ -1,19 +1,25 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System;
+using Microsoft.AspNetCore.Components;
 
 namespace Crude.Models.Fragments
 {
-    internal class NumberFragment : ICrudeFragment
+    internal class NumberFragment<T> : ICrudeValueFragment where T : IFormattable
     {
-        private readonly double _number;
+        private readonly T _number;
 
-        internal NumberFragment(double doubleValue)
+        internal NumberFragment(T doubleValue)
         {
             _number = doubleValue;
         }
 
-        public RenderFragment Render(RenderContext context) => builder =>
+        public RenderFragment RenderForm(RenderContext context)
         {
-            builder.AddContent(0, _number.ToString(context.Formatter));
+            throw new NotImplementedException();
+        }
+
+        public RenderFragment RenderValue(RenderContext context) => builder =>
+        {
+            builder.AddContent(0, _number.ToString(null, context.Formatter));
         };
     }
 }

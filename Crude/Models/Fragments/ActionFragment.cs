@@ -1,20 +1,25 @@
-﻿using System;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+using System;
 
 namespace Crude.Models.Fragments
 {
-    internal class ActionFragment : ICrudeFragment
+    internal class ActionFragment : ICrudeValueFragment
     {
-        private readonly ICrudeFragment _fragment;
+        private readonly ICrudeValueFragment _fragment;
         private readonly Action _action;
 
-        internal ActionFragment(ICrudeFragment fragment, Action action)
+        internal ActionFragment(ICrudeValueFragment fragment, Action action)
         {
             _fragment = fragment;
             _action = action;
         }
 
-        public RenderFragment Render(RenderContext context) => builder =>
+        public RenderFragment RenderForm(RenderContext context) => builder =>
+        {
+            throw new NotImplementedException();
+        };
+
+        public RenderFragment RenderValue(RenderContext context) => builder =>
         {
             var seq = 0;
 
@@ -26,11 +31,11 @@ namespace Crude.Models.Fragments
                 context.StateHasChanged();
             }
 
-            builder.AddAttribute(seq++, "onclick", (Action) ActionWithStateChange);
+            builder.AddAttribute(seq++, "onclick", (Action)ActionWithStateChange);
             builder.AddAttribute(seq++, "onclick:preventDefault", "true");
             builder.AddAttribute(seq++, "onclick:stopPropagation", "true");
 
-            builder.AddContent(seq++, _fragment.Render(context));
+            builder.AddContent(seq++, _fragment.RenderValue(context));
 
             builder.CloseElement();
         };

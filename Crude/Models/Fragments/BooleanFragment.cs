@@ -2,7 +2,7 @@
 
 namespace Crude.Models.Fragments
 {
-    internal class BooleanFragment : ICrudeFragment
+    internal class BooleanFragment : ICrudeValueFragment
     {
         private readonly bool _value;
 
@@ -11,7 +11,12 @@ namespace Crude.Models.Fragments
             _value = value;
         }
 
-        public RenderFragment Render(RenderContext context) => builder =>
+        public RenderFragment RenderForm(RenderContext context)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public RenderFragment RenderValue(RenderContext context) => builder =>
         {
             builder.AddContent(0, _value.ToString(context.Formatter));
         };

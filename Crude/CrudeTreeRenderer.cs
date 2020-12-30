@@ -1,8 +1,7 @@
 ﻿using Crude.Models;
-using Crude.Models.Fragments;
+using Crude.Models.LayoutFragments;
 using Microsoft.AspNetCore.Components;
 using System;
-using Crude.Models.LayoutFragments;
 
 namespace Crude
 {
@@ -53,13 +52,12 @@ namespace Crude
                 throw new ArgumentException($"This method can not be called for {property.Type} fragments");
             }
 
-            var labelFragment = new LabelFragment(property.Name);
-            var valueFragment = CrudeFragmentFactory.Create(property);
+            var labelFragment = new LabelFragment(property.Name, CrudeFragmentFactory.Create(property));
 
-            return new FieldFragment(labelFragment, valueFragment);
+            return new FieldFragment(labelFragment);
         }
 
-        private static ICrudeFragment? CreateTableFragment(CrudeProperty property)
+        private static ICrudeLayoutFragment? CreateTableFragment(CrudeProperty property)
         {
             if (property.Type != CrudePropertyType.Table)
             {
@@ -77,7 +75,7 @@ namespace Crude
 
             var fragment = Activator.CreateInstance(type, property.Value);
 
-            return (ICrudeFragment?) fragment;
+            return (ICrudeLayoutFragment?)fragment;
         }
     }
 }

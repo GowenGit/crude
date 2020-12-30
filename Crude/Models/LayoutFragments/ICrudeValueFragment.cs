@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace Crude.Models.Fragments
+namespace Crude.Models.LayoutFragments
 {
-    internal interface ICrudeFragment
+    internal interface ICrudeLayoutFragment
     {
         RenderFragment Render(RenderContext context);
     }

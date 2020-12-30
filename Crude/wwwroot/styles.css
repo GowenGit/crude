@@ -44,9 +44,3 @@ crude-field-fragment, crude-table-fragment {
         border: 1px solid #ccc;
         text-align: left;
     }
-
-/*Fields*/
-
-crude-field-label {
-    margin-right: 10px;
-}

@@ -5,22 +5,22 @@ namespace Crude.Models
 {
     internal static class CrudeFragmentFactory
     {
-        public static ICrudeFragment Create(CrudeProperty property)
+        public static ICrudeValueFragment Create(CrudeProperty property)
         {
             if (property.Type != CrudePropertyType.Field)
             {
                 throw new ArgumentException($"This method can not be called for {property.Type} fragments");
             }
 
-            ICrudeFragment? fragment;
+            ICrudeValueFragment? fragment;
 
             switch (property.Value)
             {
                 case double doubleValue:
-                    fragment = new NumberFragment(doubleValue);
+                    fragment = new NumberFragment<double>(doubleValue);
                     break;
                 case int intValue:
-                    fragment = new NumberFragment(intValue);
+                    fragment = new NumberFragment<int>(intValue);
                     break;
                 case string stringValue:
                     fragment = new StringFragment(stringValue);
