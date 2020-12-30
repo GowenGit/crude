@@ -1,0 +1,52 @@
+﻿/* Top Level Grid */
+
+crude-tree {
+    display: grid;
+    grid-gap: 15px;
+
+    align-items: center;
+    justify-content: space-evenly;
+
+    grid-template: auto / auto auto auto;
+}
+
+crude-field-fragment {
+    align-self: center;
+}
+
+crude-table-fragment {
+    align-self: center;
+    grid-column: 1 / span 3;
+}
+
+crude-field-fragment, crude-table-fragment {
+    border: 1px solid black;
+}
+
+/* Tables */
+    crude-table-fragment table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    crude-table-fragment tr:nth-of-type(odd) {
+        background: #eee;
+    }
+
+    crude-table-fragment th {
+        background: #333;
+        color: white;
+        font-weight: bold;
+    }
+
+    crude-table-fragment td, th {
+        padding: 6px;
+        border: 1px solid #ccc;
+        text-align: left;
+    }
+
+/*Fields*/
+
+crude-field-label {
+    margin-right: 10px;
+}

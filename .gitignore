@@ -1,0 +1,6 @@
+.vs/
+
+bin/
+obj/
+data.db
+data.db*
