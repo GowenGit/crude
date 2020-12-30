@@ -4,17 +4,17 @@ namespace Crude.Models.Fragments
 {
     internal class EmptyFragment : ICrudeFragment
     {
-        public RenderFragment Render(RenderOptions options) => builder =>
+        public RenderFragment Render(RenderContext context) => builder =>
         {
-            builder.AddContent(0, RenderOptions.EmptyPlaceholder);
+            builder.AddContent(0, RenderContext.EmptyPlaceholder);
         };
     }
 
     internal class NotRenderedFragment : ICrudeFragment
     {
-        public RenderFragment Render(RenderOptions options) => builder =>
+        public RenderFragment Render(RenderContext context) => builder =>
         {
-            builder.AddContent(0, RenderOptions.NotRenderedPlaceholder);
+            builder.AddContent(0, RenderContext.NotRenderedPlaceholder);
         };
     }
 }

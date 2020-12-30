@@ -16,7 +16,7 @@ namespace Crude.Models.Formatters
         {
             if (arg == null)
             {
-                return RenderOptions.EmptyPlaceholder;
+                return RenderContext.EmptyPlaceholder;
             }
 
             if (arg is double d)
@@ -29,7 +29,7 @@ namespace Crude.Models.Formatters
                 return formattable.ToString(format, formatProvider);
             }
 
-            return arg.ToString() ?? RenderOptions.EmptyPlaceholder;
+            return arg.ToString() ?? RenderContext.EmptyPlaceholder;
         }
     }
 }

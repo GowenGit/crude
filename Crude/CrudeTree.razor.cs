@@ -11,7 +11,7 @@ namespace Crude
         public IReadOnlyList<object> ViewModels { get; set; } = new List<object>();
 
         [Parameter]
-        public RenderOptions Options { get; set; } = new RenderOptions(CultureInfo.CurrentCulture);
+        public CrudeOptions Options { get; set; } = new CrudeOptions(CultureInfo.CurrentCulture);
 
         private CrudeTreeRenderer? _renderer;
 

@@ -15,18 +15,18 @@ namespace Crude.Models.LayoutFragments
             _element = element;
         }
 
-        public RenderFragment Render(RenderOptions options) => builder =>
+        public RenderFragment Render(RenderContext context) => builder =>
         {
             var seq = 0;
 
             builder.OpenElement(seq++, "crude-field-fragment");
 
             builder.OpenElement(seq++, "crude-field-label");
-            builder.AddContent(seq++, _label.Render(options));
+            builder.AddContent(seq++, _label.Render(context));
             builder.CloseElement();
 
             builder.OpenElement(seq++, "crude-field-value");
-            builder.AddContent(seq++, _element.Render(options));
+            builder.AddContent(seq++, _element.Render(context));
             builder.CloseElement();
 
             builder.CloseElement();

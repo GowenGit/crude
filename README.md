@@ -14,7 +14,7 @@
 * [x] Custom table data loader
 * [ ] Custom field formatter
 * [ ] Custom property renderer
-* [ ] Custom onclick event
+* [x] Custom onclick event
 * [ ] Custom edit event
 * [ ] Table pagination
 * [ ] Table sort

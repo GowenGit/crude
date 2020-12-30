@@ -13,7 +13,7 @@ namespace Crude.Models.LayoutFragments
             _table = table;
         }
 
-        public RenderFragment Render(RenderOptions options) => builder =>
+        public RenderFragment Render(RenderContext context) => builder =>
         {
             var seq = 0;
 
@@ -36,7 +36,7 @@ namespace Crude.Models.LayoutFragments
             foreach (var item in items)
             {
                 builder.OpenElement(seq++, "th");
-                builder.AddContent(seq++, item.Name.ToString(options.Formatter));
+                builder.AddContent(seq++, item.Name.ToString(context.Formatter));
                 builder.CloseElement();
             }
 
@@ -45,7 +45,7 @@ namespace Crude.Models.LayoutFragments
 
             builder.OpenElement(seq++, "tbody");
 
-            var elements = _table.GetElements(_table.Page, options.TablePageSize);
+            var elements = _table.GetElements(_table.Page, context.TablePageSize);
 
             foreach (var element in elements)
             {
@@ -58,7 +58,7 @@ namespace Crude.Models.LayoutFragments
                     var fragment = CrudeFragmentFactory.Create(item);
 
                     builder.OpenElement(seq++, "td");
-                    builder.AddContent(seq++, fragment.Render(options));
+                    builder.AddContent(seq++, fragment.Render(context));
                     builder.CloseElement();
                 }
 

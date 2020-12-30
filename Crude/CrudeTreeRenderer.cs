@@ -15,9 +15,11 @@ namespace Crude
             _viewModel = viewModel;
         }
 
-        public RenderFragment Render(RenderOptions options) => builder =>
+        public RenderFragment Render(CrudeOptions options, Action notifyStateChange) => builder =>
         {
             var items = CrudePropertyFactory.Create(_viewModel);
+
+            var context = new RenderContext(notifyStateChange, options);
 
             var seq = 0;
 
@@ -27,12 +29,7 @@ namespace Crude
                 {
                     var fragment = CreateFieldFragment(item);
 
-                    if (fragment == null)
-                    {
-                        continue;
-                    }
-
-                    builder.AddContent(seq++, fragment.Render(options));
+                    builder.AddContent(seq++, fragment.Render(context));
                 }
 
                 if (item.Type == CrudePropertyType.Table)
@@ -44,12 +41,12 @@ namespace Crude
                         continue;
                     }
 
-                    builder.AddContent(seq++, fragment.Render(options));
+                    builder.AddContent(seq++, fragment.Render(context));
                 }
             }
         };
 
-        private static FieldFragment? CreateFieldFragment(CrudeProperty property)
+        private static FieldFragment CreateFieldFragment(CrudeProperty property)
         {
             if (property.Type != CrudePropertyType.Field)
             {
@@ -61,7 +58,6 @@ namespace Crude
 
             return new FieldFragment(labelFragment, valueFragment);
         }
-
 
         private static ICrudeFragment? CreateTableFragment(CrudeProperty property)
         {

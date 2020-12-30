@@ -4,6 +4,6 @@ namespace Crude.Models.Fragments
 {
     internal interface ICrudeFragment
     {
-        RenderFragment Render(RenderOptions options);
+        RenderFragment Render(RenderContext context);
     }
 }

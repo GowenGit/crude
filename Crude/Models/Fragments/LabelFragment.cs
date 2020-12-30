@@ -17,9 +17,9 @@ namespace Crude.Models.Fragments
             _name = name;
         }
 
-        public RenderFragment Render(RenderOptions options) => builder =>
+        public RenderFragment Render(RenderContext context) => builder =>
         {
-            builder.AddContent(0, _name.ToString(options.Formatter));
+            builder.AddContent(0, _name.ToString(context.Formatter));
         };
     }
 }

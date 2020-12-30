@@ -7,4 +7,7 @@ namespace Crude.Models.Attributes
 
     [AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
     public abstract class CrudeViewModelAttribute : Attribute { }
+
+    [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
+    public abstract class CrudeMethodAttribute : Attribute { }
 }

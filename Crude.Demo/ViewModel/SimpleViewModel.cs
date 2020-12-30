@@ -32,6 +32,19 @@ namespace Crude.Demo.ViewModel
         public SimpleEnum Status { get; set; } = SimpleEnum.Active;
 
         public DateTime Created { get; set; } = DateTime.Now;
+
+        [CrudeOnClick(nameof(Status))]
+        private void OnStatusClick()
+        {
+            if (Status == SimpleEnum.Active)
+            {
+                Status = SimpleEnum.Passive;
+            }
+            else
+            {
+                Status = SimpleEnum.Active;
+            }
+        }
     }
 
     public class SimpleTable : CrudeTable<SimpleTableViewModel>

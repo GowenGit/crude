@@ -45,6 +45,11 @@ namespace Crude.Models
                     break;
             }
 
+            if (property.OnClick != null)
+            {
+                fragment = new ActionFragment(fragment, property.OnClick);
+            }
+
             return fragment;
         }
     }

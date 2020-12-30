@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace Crude
 {
-    public class RenderOptions
+    internal class RenderContext
     {
         public const string EmptyPlaceholder = "N/A";
 
@@ -12,24 +12,37 @@ namespace Crude
 
         internal BaseRenderFormatter Formatter { get; }
 
+        public int TablePageSize { get; }
+
+        public Action StateHasChanged { get; }
+
+        public RenderContext(Action stateHasChanged, CrudeOptions userOptions)
+        {
+            StateHasChanged = stateHasChanged;
+
+            TablePageSize = userOptions.TablePageSize;
+            Formatter = userOptions.Formatter;
+        }
+    }
+
+    public class CrudeOptions
+    {
+        internal BaseRenderFormatter Formatter { get; }
+
         public int TablePageSize { get; } = 10;
 
-        public RenderOptions(BaseRenderFormatter formatter, int tablePageSize)
+        public CrudeOptions(BaseRenderFormatter formatter, int tablePageSize)
         {
             if (tablePageSize < 1)
             {
                 throw new ArgumentException("Page size should be greater than 0", nameof(tablePageSize));
             }
 
+            TablePageSize = tablePageSize;
             Formatter = formatter;
         }
 
-        public RenderOptions(BaseRenderFormatter formatter)
-        {
-            Formatter = formatter;
-        }
-
-        public RenderOptions(CultureInfo culture)
+        public CrudeOptions(CultureInfo culture)
         {
             Formatter = new DefaultRenderFormatter(culture);
         }

@@ -12,7 +12,7 @@ namespace Crude.Models.Fragments
             _value = value;
         }
 
-        public RenderFragment Render(RenderOptions options) => builder =>
+        public RenderFragment Render(RenderContext context) => builder =>
         {
             builder.AddContent(0, _value.ToString());
         };

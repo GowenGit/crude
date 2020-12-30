@@ -1,4 +1,5 @@
-﻿using Crude.Models.Attributes;
+﻿using System;
+using Crude.Models.Attributes;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -12,6 +13,8 @@ namespace Crude.Models
             var items = new List<CrudeProperty>();
 
             var properties = viewModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            var methods = GetMethods(viewModel);
 
             foreach (var property in properties)
             {
@@ -36,17 +39,74 @@ namespace Crude.Models
                     name = nameAttribute.Name;
                 }
 
-                var value = property.GetValue(viewModel);
+                var value = property.GetValue(viewModel) ?? new EmptyValue();
 
-                if (value == null)
+                Action? onClick = null;
+
+                foreach (var method in methods)
                 {
-                    value = new EmptyValue();
+                    if (method.Attributes.FirstOrDefault(x => x is CrudeOnClickAttribute) is CrudeOnClickAttribute onClickAttribute)
+                    {
+                        if (onClickAttribute.Property == property.Name)
+                        {
+                            onClick = () =>
+                            {
+                                method.MethodInfo.Invoke(viewModel, new object[] { });
+                            };
+                        }
+                    }
                 }
 
-                items.Add(new CrudeProperty(name, order, value));
+                items.Add(new CrudeProperty(name, order, value, onClick));
             }
 
             return items.OrderBy(x => x.Order);
+        }
+
+        private static List<CrudeMethod> GetMethods(object viewModel)
+        {
+            var items = new List<CrudeMethod>();
+
+            var type = viewModel.GetType();
+
+            const BindingFlags bindingAttr = BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+
+            var methods = type.GetMethods(bindingAttr);
+
+            foreach (var memberInfo in methods)
+            {
+                var attributes = memberInfo.GetCustomAttributes(typeof(CrudeMethodAttribute)).ToList();
+
+                if (attributes.Any())
+                {
+                    var methodInfo = type.GetMethod(memberInfo.Name, bindingAttr);
+
+                    if (methodInfo == null)
+                    {
+                        continue;
+                    }
+
+                    items.Add(new CrudeMethod(memberInfo, methodInfo, attributes.Cast<CrudeMethodAttribute>().ToList()));
+                }
+            }
+
+            return items;
+        }
+    }
+
+    internal class CrudeMethod
+    {
+        public MemberInfo MemberInfo { get; }
+
+        public MethodInfo MethodInfo { get; }
+
+        public List<CrudeMethodAttribute> Attributes { get; }
+
+        public CrudeMethod(MemberInfo memberInfo, MethodInfo methodInfo, List<CrudeMethodAttribute> attributes)
+        {
+            MemberInfo = memberInfo;
+            MethodInfo = methodInfo;
+            Attributes = attributes;
         }
     }
 
@@ -60,11 +120,14 @@ namespace Crude.Models
 
         public CrudePropertyType Type { get; }
 
-        public CrudeProperty(string name, int order, object value)
+        public Action? OnClick { get; }
+
+        public CrudeProperty(string name, int order, object value, Action? onClick)
         {
             Name = name;
             Order = order;
             Value = value;
+            OnClick = onClick;
 
             if (value.IsGenericBaseType(typeof(CrudeTable<>)))
             {
