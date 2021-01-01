@@ -2,7 +2,7 @@
 
 namespace Crude.Models.Fragments
 {
-    internal class BooleanFragment : ICrudeValueFragment
+    internal class BooleanFragment : IFieldFragment
     {
         private readonly bool _value;
 

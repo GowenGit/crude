@@ -45,16 +45,14 @@ namespace Crude
             }
         };
 
-        private static FieldFragment CreateFieldFragment(CrudeProperty property)
+        private static FieldGroupFragment CreateFieldFragment(CrudeProperty property)
         {
             if (property.Type != CrudePropertyType.Field)
             {
                 throw new ArgumentException($"This method can not be called for {property.Type} fragments");
             }
 
-            var labelFragment = new LabelFragment(property.Name, CrudeFragmentFactory.Create(property));
-
-            return new FieldFragment(labelFragment);
+            return new FieldGroupFragment(property.Name, CrudeFragmentFactory.Create(property));
         }
 
         private static ICrudeLayoutFragment? CreateTableFragment(CrudeProperty property)

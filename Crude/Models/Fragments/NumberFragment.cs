@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Crude.Models.Fragments
 {
-    internal class NumberFragment<T> : ICrudeValueFragment where T : IFormattable
+    internal class NumberFragment<T> : IFieldFragment where T : IFormattable
     {
         private readonly T _number;
 

@@ -33,6 +33,8 @@ namespace Crude.Demo.ViewModel
 
         public DateTime Created { get; set; } = DateTime.Now;
 
+        public string? StringFieldTwo { get; set; } = null;
+
         [CrudeOnClick(nameof(Status))]
         private void OnStatusClick()
         {

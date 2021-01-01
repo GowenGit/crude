@@ -1,28 +1,24 @@
-﻿using System;
-using Crude.Models.Fragments;
+﻿using Crude.Models.Fragments;
 using Microsoft.AspNetCore.Components;
 
 namespace Crude.Models.LayoutFragments
 {
-    internal class LabelFragment : ICrudeLayoutFragment
+    internal class FieldGroupFragment : ICrudeLayoutFragment
     {
         private readonly string _name;
-        private readonly ICrudeValueFragment _valueFragment;
+        private readonly IFieldFragment _fieldFragment;
 
-        public LabelFragment(string name, ICrudeValueFragment valueFragment)
+        public FieldGroupFragment(string name, IFieldFragment fieldFragment)
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-
             _name = name;
-            _valueFragment = valueFragment;
+            _fieldFragment = fieldFragment;
         }
 
         public RenderFragment Render(RenderContext context) => builder =>
         {
             var seq = 0;
+
+            builder.OpenElement(seq++, "crude-field-fragment");
 
             builder.OpenElement(seq++, "label");
 
@@ -30,7 +26,9 @@ namespace Crude.Models.LayoutFragments
             builder.AddContent(seq++, _name.ToString(context.Formatter));
             builder.CloseElement();
 
-            builder.AddContent(seq++, _valueFragment.RenderValue(context));
+            builder.AddContent(seq++, _fieldFragment.RenderValue(context));
+
+            builder.CloseElement();
 
             builder.CloseElement();
         };

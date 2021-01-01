@@ -2,7 +2,8 @@
 
 namespace Crude.Models.Fragments
 {
-    internal class EmptyFragment : ICrudeValueFragment
+    // TODO: Not needed, change to standard fragment usages
+    internal class EmptyFragment : IFieldFragment
     {
         public RenderFragment RenderForm(RenderContext context) => builder =>
         {
@@ -15,7 +16,7 @@ namespace Crude.Models.Fragments
         };
     }
 
-    internal class NotRenderedFragment : ICrudeValueFragment
+    internal class NotRenderedFragment : IFieldFragment
     {
         public RenderFragment RenderForm(RenderContext context) => builder =>
         {

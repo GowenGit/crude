@@ -39,7 +39,7 @@ namespace Crude.Models
                     name = nameAttribute.Name;
                 }
 
-                var value = property.GetValue(viewModel) ?? new EmptyValue();
+                var value = property.GetValue(viewModel) ?? new EmptyValue(property.PropertyType);
 
                 Action? onClick = null;
 
@@ -146,5 +146,14 @@ namespace Crude.Models
         Table = 1
     }
 
-    internal class EmptyValue { }
+    internal class EmptyValue
+    {
+        public Type Type { get; }
+
+        public EmptyValue(Type type)
+        {
+            // TODO: nullable
+            Type = type;
+        }
+    }
 }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Crude.Models.Fragments
 {
-    internal class DateFragment : ICrudeValueFragment
+    internal class DateFragment : IFieldFragment
     {
         private readonly DateTime _value;
 

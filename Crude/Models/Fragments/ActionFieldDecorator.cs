@@ -3,12 +3,13 @@ using System;
 
 namespace Crude.Models.Fragments
 {
-    internal class ActionFragment : ICrudeValueFragment
+    internal class ActionFieldDecorator : IFieldFragment
     {
-        private readonly ICrudeValueFragment _fragment;
+        private readonly IFieldFragment _fragment;
+
         private readonly Action _action;
 
-        internal ActionFragment(ICrudeValueFragment fragment, Action action)
+        internal ActionFieldDecorator(IFieldFragment fragment, Action action)
         {
             _fragment = fragment;
             _action = action;

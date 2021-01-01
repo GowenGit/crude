@@ -2,7 +2,7 @@
 
 namespace Crude.Models.Fragments
 {
-    internal class StringFragment : ICrudeValueFragment
+    internal class StringFragment : IFieldFragment
     {
         private readonly string _value;
 

@@ -2,7 +2,7 @@
 
 namespace Crude.Models.Fragments
 {
-    internal interface ICrudeValueFragment
+    internal interface IFieldFragment
     {
         RenderFragment RenderForm(RenderContext context);
 

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Crude.Models.Fragments
 {
-    internal class EnumFragment : ICrudeValueFragment
+    internal class EnumFragment : IFieldFragment
     {
         private readonly Enum _value;
 

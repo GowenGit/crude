@@ -5,14 +5,14 @@ namespace Crude.Models
 {
     internal static class CrudeFragmentFactory
     {
-        public static ICrudeValueFragment Create(CrudeProperty property)
+        public static IFieldFragment Create(CrudeProperty property)
         {
             if (property.Type != CrudePropertyType.Field)
             {
                 throw new ArgumentException($"This method can not be called for {property.Type} fragments");
             }
 
-            ICrudeValueFragment? fragment;
+            IFieldFragment? fragment;
 
             switch (property.Value)
             {
@@ -47,7 +47,7 @@ namespace Crude.Models
 
             if (property.OnClick != null)
             {
-                fragment = new ActionFragment(fragment, property.OnClick);
+                fragment = new ActionFieldDecorator(fragment, property.OnClick);
             }
 
             return fragment;
