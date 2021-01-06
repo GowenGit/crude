@@ -4,12 +4,9 @@ namespace Crude.Models.FieldFragments
 {
     internal class NotRenderedFragment : FieldFragment
     {
-        public override RenderFragment Render(RenderContext context) => builder =>
-        {
-            builder.AddContent(0, RenderContext.NotRenderedPlaceholder);
-        };
+        internal NotRenderedFragment(CrudeProperty property) : base(property) { }
 
-        public RenderFragment RenderValue(RenderContext context) => builder =>
+        public override RenderFragment Render(RenderContext context) => builder =>
         {
             builder.AddContent(0, RenderContext.NotRenderedPlaceholder);
         };

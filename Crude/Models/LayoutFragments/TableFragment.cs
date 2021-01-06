@@ -4,7 +4,7 @@ using Crude.Models.Fragments;
 
 namespace Crude.Models.LayoutFragments
 {
-    internal class TableFragment<T> : ICrudeLayoutFragment where T : class
+    internal class TableFragment<T> : IFragment where T : class
     {
         private readonly CrudeTable<T> _table;
 
@@ -78,16 +78,17 @@ namespace Crude.Models.LayoutFragments
 
             string value;
 
-            switch (property.Value)
+            switch (property.GetValue())
             {
                 case IFormattable formattable:
                     value = formattable.ToString(null, context.Formatter);
                     break;
-                case EmptyValue _:
-                    value = RenderContext.EmptyPlaceholder;
+                case string stringValue:
+                    value = stringValue.ToString(context.Formatter);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    value = RenderContext.EmptyPlaceholder;
+                    break;
             }
 
             var fragment = new ActionDecoratorFragment(value, property.OnClick);

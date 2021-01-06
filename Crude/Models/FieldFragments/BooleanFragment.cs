@@ -5,20 +5,15 @@ namespace Crude.Models.FieldFragments
 {
     internal class BooleanFragment : FieldFragment
     {
-        private readonly bool _value;
-
-        internal BooleanFragment(bool value)
-        {
-            _value = value;
-        }
+        internal BooleanFragment(CrudeProperty property) : base(property) { }
 
         public override RenderFragment Render(RenderContext context) => builder =>
         {
             var seq = 0;
 
-            builder.OpenComponent<InputText>(seq++);
-            builder.AddAttribute(1, "Placeholder", _value.ToString(context.Formatter));
-            builder.CloseComponent();
+            builder.OpenComponent<InputCheckbox>(seq++);
+
+            AddFieldAttributesByType(ref seq, builder);
         };
     }
 }

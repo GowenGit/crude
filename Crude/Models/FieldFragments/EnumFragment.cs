@@ -1,25 +1,38 @@
-﻿using System;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using System;
 
 namespace Crude.Models.FieldFragments
 {
     internal class EnumFragment : FieldFragment
     {
-        private readonly Enum _value;
-
-        internal EnumFragment(Enum value)
-        {
-            _value = value;
-        }
+        internal EnumFragment(CrudeProperty property) : base(property) { }
 
         public override RenderFragment Render(RenderContext context) => builder =>
         {
             var seq = 0;
 
-            builder.OpenComponent<InputText>(seq++);
-            builder.AddAttribute(1, "Placeholder", _value.ToString());
-            builder.CloseComponent();
+            var enumType = Property.Info.PropertyType;
+
+            var type = typeof(InputSelect<>).MakeGenericType(enumType);
+
+            builder.OpenComponent(seq++, type);
+
+            builder.AddAttribute(seq++, "ChildContent", RenderOptions(enumType));
+
+            AddFieldAttributesByType(ref seq, builder, enumType);
+        };
+
+        private static RenderFragment RenderOptions(Type enumType) => builder =>
+        {
+            var seq = 0;
+
+            foreach (var value in Enum.GetValues(enumType.UnwrapNullable()))
+            {
+                builder.OpenElement(seq++, "option");
+                builder.AddContent(seq++, value.ToString());
+                builder.CloseElement();
+            }
         };
     }
 }

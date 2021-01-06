@@ -7,19 +7,19 @@ namespace Crude.Models.Fragments
     {
         private readonly string _value;
 
-        private readonly Action? _action;
+        private readonly CrudeEvent? _event;
 
-        internal ActionDecoratorFragment(string value, Action? action)
+        internal ActionDecoratorFragment(string value, CrudeEvent? crudeEvent)
         {
             _value = value;
-            _action = action;
+            _event = crudeEvent;
         }
 
         public RenderFragment Render(RenderContext context) => builder =>
         {
             var seq = 0;
 
-            if (_action == null)
+            if (_event == null)
             {
                 builder.AddContent(seq++, _value);
 
@@ -28,13 +28,7 @@ namespace Crude.Models.Fragments
 
             builder.OpenElement(seq++, "a");
 
-            void ActionWithStateChange()
-            {
-                _action();
-                context.StateHasChanged();
-            }
-
-            builder.AddAttribute(seq++, "onclick", (Action)ActionWithStateChange);
+            builder.AddAttribute(seq++, "onclick", context.CreateEvent(_event.Callback));
             builder.AddAttribute(seq++, "onclick:preventDefault", "true");
             builder.AddAttribute(seq++, "onclick:stopPropagation", "true");
 

@@ -4,9 +4,9 @@ namespace Crude.Models
 {
     internal static class TypeExtensions
     {
-        public static bool IsGenericBaseType(this object instance, Type generic)
+        public static bool IsGenericBaseType(this Type propertyType, Type generic)
         {
-            var baseType = instance.GetType().BaseType;
+            var baseType = propertyType.BaseType;
 
             if (baseType?.IsGenericType != true)
             {
@@ -14,6 +14,18 @@ namespace Crude.Models
             }
 
             return baseType.GetGenericTypeDefinition().IsAssignableFrom(generic);
+        }
+
+        public static Type UnwrapNullable(this Type type)
+        {
+            var nullableType = Nullable.GetUnderlyingType(type);
+
+            if (nullableType != null)
+            {
+                return nullableType;
+            }
+
+            return type;
         }
     }
 }

@@ -1,36 +1,121 @@
-﻿using Crude.Models.FieldFragments;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Crude.Models.FieldFragments;
+using Crude.Models.Fragments;
 using Microsoft.AspNetCore.Components;
 
 namespace Crude.Models.LayoutFragments
 {
-    internal class FieldGroupFragment : ICrudeLayoutFragment
+    internal class FieldGroupFragment : IFragment
     {
-        private readonly string _name;
-        private readonly FieldFragment _fieldFragment;
+        private readonly CrudeProperty _property;
 
-        public FieldGroupFragment(string name, FieldFragment fieldFragment)
+        private static readonly HashSet<Type> NumericTypes = new HashSet<Type>
         {
-            _name = name;
-            _fieldFragment = fieldFragment;
+            typeof(int),
+            typeof(double),
+            typeof(decimal),
+            typeof(long),
+            typeof(short),
+            typeof(sbyte),
+            typeof(byte),
+            typeof(ulong),
+            typeof(ushort),
+            typeof(uint),
+            typeof(float)
+        };
+
+        private static readonly HashSet<Type> DateTypes = new HashSet<Type>
+        {
+            typeof(DateTime),
+            typeof(DateTimeOffset)
+        };
+
+        public FieldGroupFragment(CrudeProperty property)
+        {
+            _property = property;
         }
 
         public RenderFragment Render(RenderContext context) => builder =>
         {
+            var fragment = Create(_property);
+
             var seq = 0;
 
             builder.OpenElement(seq++, "crude-field-fragment");
 
             builder.OpenElement(seq++, "label");
-
-            builder.OpenElement(seq++, "span");
-            builder.AddContent(seq++, _name.ToString(context.Formatter));
+            builder.AddAttribute(seq++, "for", fragment.Identifier);
+            builder.AddContent(seq++, _property.Name.ToString(context.Formatter));
             builder.CloseElement();
 
-            builder.AddContent(seq++, _fieldFragment.Render(context));
-
-            builder.CloseElement();
+            builder.AddContent(seq++, fragment.Render(context));
 
             builder.CloseElement();
         };
+
+        private static FieldFragment Create(CrudeProperty property)
+        {
+            if (property.Type != CrudePropertyType.Field)
+            {
+                throw new ArgumentException($"This method can not be called for {property.Type} fragments");
+            }
+
+            var type = property.Info.PropertyType;
+
+            var unwrappedType = type.UnwrapNullable();
+
+            FieldFragment? fragment = null;
+
+            if (IsNumeric(unwrappedType))
+            {
+                fragment = CreateGeneric(typeof(NumberFragment<>), type, property);
+            }
+
+            if (IsDate(unwrappedType))
+            {
+                fragment = CreateGeneric(typeof(DateFragment<>), type, property);
+            }
+
+            if (unwrappedType == typeof(bool))
+            {
+                fragment = new BooleanFragment(property);
+            }
+
+            if (unwrappedType == typeof(string))
+            {
+                fragment = new StringFragment(property);
+            }
+
+            if (unwrappedType.IsEnum)
+            {
+                fragment = new EnumFragment(property);
+            }
+
+            return fragment ??= new NotRenderedFragment(property);
+        }
+
+        private static bool IsNumeric(Type type)
+        {
+            return NumericTypes.Contains(type);
+        }
+
+        private static bool IsDate(Type type)
+        {
+            return DateTypes.Contains(type);
+        }
+
+        private static FieldFragment CreateGeneric(Type outerType, Type innerType, CrudeProperty property)
+        {
+            var type = outerType.MakeGenericType(innerType);
+
+            var ctor = type
+                .GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance)
+                .First();
+
+            return (FieldFragment) ctor.Invoke(new object?[] { property });
+        }
     }
 }

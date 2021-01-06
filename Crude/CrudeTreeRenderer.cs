@@ -1,8 +1,11 @@
 ﻿using Crude.Models;
+using Crude.Models.Fragments;
 using Crude.Models.LayoutFragments;
 using Microsoft.AspNetCore.Components;
-using System;
 using Microsoft.AspNetCore.Components.Forms;
+using System;
+using System.Linq;
+using Crude.Models.Attributes;
 
 namespace Crude
 {
@@ -14,15 +17,28 @@ namespace Crude
 
             builder.OpenComponent<EditForm>(seq++);
             builder.AddAttribute(seq++, "EditContext", context.EditContext);
-            builder.AddAttribute(seq++, "ChildContent", RenderFormContents(context));
+
+            var onSubmit = GetOnSubmitButton(context);
+
+            if (onSubmit != null)
+            {
+                builder.AddAttribute(seq++, "OnSubmit", onSubmit.Callback);
+            }
+
+            builder.AddAttribute(seq++, "ChildContent", RenderFormContents(context, onSubmit));
             builder.CloseComponent();
         };
 
-        private static RenderFragment<EditContext> RenderFormContents(RenderContext context) => ctx => builder =>
+        private static RenderFragment<EditContext> RenderFormContents(RenderContext context, CrudeButton<EditContext>? onSubmit) => ctx => builder =>
         {
             var items = CrudePropertyFactory.Create(context.ViewModel);
 
             var seq = 0;
+
+            builder.OpenComponent<DataAnnotationsValidator>(seq++);
+            builder.CloseComponent();
+            builder.OpenComponent<ValidationSummary>(seq++);
+            builder.CloseComponent();
 
             builder.OpenElement(seq++, "crude-tree");
 
@@ -48,6 +64,14 @@ namespace Crude
                 }
             }
 
+            if (onSubmit != null)
+            {
+                builder.OpenElement(seq++, "button");
+                builder.AddAttribute(seq++, "type", "submit");
+                builder.AddContent(seq++, onSubmit.Name);
+                builder.CloseElement();
+            }
+
             builder.CloseElement();
         };
 
@@ -58,17 +82,17 @@ namespace Crude
                 throw new ArgumentException($"This method can not be called for {property.Type} fragments");
             }
 
-            return new FieldGroupFragment(property.Name, CrudeFragmentFactory.Create(property));
+            return new FieldGroupFragment(property);
         }
 
-        private static ICrudeLayoutFragment? CreateTableFragment(CrudeProperty property)
+        private static IFragment? CreateTableFragment(CrudeProperty property)
         {
             if (property.Type != CrudePropertyType.Table)
             {
                 throw new ArgumentException($"This method can not be called for {property.Type} fragments");
             }
 
-            var viewModelType = property.Value.GetType().BaseType?.GetGenericArguments()[0];
+            var viewModelType = property.Info.PropertyType.BaseType?.GetGenericArguments()[0];
 
             if (viewModelType == null)
             {
@@ -77,9 +101,28 @@ namespace Crude
 
             var type = typeof(TableFragment<>).MakeGenericType(viewModelType);
 
-            var fragment = Activator.CreateInstance(type, property.Value);
+            var fragment = Activator.CreateInstance(type, property.GetValue());
 
-            return (ICrudeLayoutFragment?)fragment;
+            return (IFragment?)fragment;
+        }
+
+        private CrudeButton<EditContext>? GetOnSubmitButton(RenderContext context)
+        {
+            var methods = CrudePropertyFactory.GetMethods(context.ViewModel);
+
+            CrudeButton<EditContext>? button = null;
+
+            foreach (var method in methods)
+            {
+                if (method.Attributes.FirstOrDefault(x => x is CrudeOnSubmitAttribute) is CrudeOnSubmitAttribute crudeOnSubmitAttribute)
+                {
+                    button = new CrudeButton<EditContext>(
+                         context.CreateEvent<EditContext>(ctx => method.MethodInfo.Invoke(context.ViewModel, new object[] { ctx })),
+                         crudeOnSubmitAttribute.Name);
+                }
+            }
+
+            return button;
         }
     }
 }

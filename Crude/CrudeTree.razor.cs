@@ -15,7 +15,7 @@ namespace Crude
         {
             var renderer = new CrudeTreeRenderer();
 
-            var context = new RenderContext(ViewModel, StateHasChanged, Options);
+            var context = new RenderContext(this, ViewModel, Options);
 
             return renderer.Render(context);
         }

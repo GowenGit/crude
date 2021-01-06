@@ -3,6 +3,7 @@ using Crude.Models.Attributes;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.AspNetCore.Components;
 
 namespace Crude.Models
 {
@@ -39,9 +40,7 @@ namespace Crude.Models
                     name = nameAttribute.Name;
                 }
 
-                var value = property.GetValue(viewModel) ?? new EmptyValue(property.PropertyType);
-
-                Action? onClick = null;
+                CrudeEvent? onClick = null;
 
                 foreach (var method in methods)
                 {
@@ -49,21 +48,18 @@ namespace Crude.Models
                     {
                         if (onClickAttribute.Property == property.Name)
                         {
-                            onClick = () =>
-                            {
-                                method.MethodInfo.Invoke(viewModel, new object[] { });
-                            };
+                            onClick = new CrudeEvent(() => method.MethodInfo.Invoke(viewModel, new object[] { }));
                         }
                     }
                 }
 
-                items.Add(new CrudeProperty(name, order, value, onClick));
+                items.Add(new CrudeProperty(name, order, onClick, property, viewModel));
             }
 
             return items.OrderBy(x => x.Order);
         }
 
-        private static List<CrudeMethod> GetMethods(object viewModel)
+        public static List<CrudeMethod> GetMethods(object viewModel)
         {
             var items = new List<CrudeMethod>();
 
@@ -116,20 +112,28 @@ namespace Crude.Models
 
         public int Order { get; }
 
-        public object Value { get; }
-
         public CrudePropertyType Type { get; }
 
-        public Action? OnClick { get; }
+        public CrudeEvent? OnClick { get; }
 
-        public CrudeProperty(string name, int order, object value, Action? onClick)
+        public PropertyInfo Info { get; }
+
+        public object ViewModel { get; }
+
+        public CrudeProperty(
+            string name,
+            int order,
+            CrudeEvent? onClick,
+            PropertyInfo info,
+            object viewModel)
         {
             Name = name;
             Order = order;
-            Value = value;
             OnClick = onClick;
+            Info = info;
+            ViewModel = viewModel;
 
-            if (value.IsGenericBaseType(typeof(CrudeTable<>)))
+            if (Info.PropertyType.IsGenericBaseType(typeof(CrudeTable<>)))
             {
                 Type = CrudePropertyType.Table;
             }
@@ -138,22 +142,21 @@ namespace Crude.Models
                 Type = CrudePropertyType.Field;
             }
         }
+
+        public object? GetValue()
+        {
+            return Info.GetValue(ViewModel);
+        }
+
+        public void SetValue(object? value)
+        {
+            Info.SetValue(ViewModel, value);
+        }
     }
 
     internal enum CrudePropertyType
     {
         Field = 0,
         Table = 1
-    }
-
-    internal class EmptyValue
-    {
-        public Type Type { get; }
-
-        public EmptyValue(Type type)
-        {
-            // TODO: nullable
-            Type = type;
-        }
     }
 }

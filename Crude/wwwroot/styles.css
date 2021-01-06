@@ -44,3 +44,13 @@ crude-field-fragment, crude-table-fragment {
         border: 1px solid #ccc;
         text-align: left;
     }
+
+/*Fields*/
+
+crude-field-fragment > * {
+    display: block;
+}
+
+input:not([type=checkbox]), select {
+    min-width: 150px;
+}
