@@ -1,18 +1,18 @@
 ﻿using System;
-using Crude.Models.Fragments;
+using Crude.Models.FieldFragments;
 
 namespace Crude.Models
 {
     internal static class CrudeFragmentFactory
     {
-        public static IFieldFragment Create(CrudeProperty property)
+        public static FieldFragment Create(CrudeProperty property)
         {
             if (property.Type != CrudePropertyType.Field)
             {
                 throw new ArgumentException($"This method can not be called for {property.Type} fragments");
             }
 
-            IFieldFragment? fragment;
+            FieldFragment? fragment;
 
             switch (property.Value)
             {
@@ -37,17 +37,9 @@ namespace Crude.Models
                 case DateTimeOffset dateTimeOffsetValue:
                     fragment = new DateFragment(dateTimeOffsetValue.Date);
                     break;
-                case EmptyValue:
-                    fragment = new EmptyFragment();
-                    break;
                 default:
                     fragment = new NotRenderedFragment();
                     break;
-            }
-
-            if (property.OnClick != null)
-            {
-                fragment = new ActionFieldDecorator(fragment, property.OnClick);
             }
 
             return fragment;

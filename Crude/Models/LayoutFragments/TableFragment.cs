@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
+using Crude.Models.Fragments;
 
 namespace Crude.Models.LayoutFragments
 {
@@ -54,10 +55,8 @@ namespace Crude.Models.LayoutFragments
 
                 foreach (var item in rowItems)
                 {
-                    var fragment = CrudeFragmentFactory.Create(item);
-
                     builder.OpenElement(seq++, "td");
-                    builder.AddContent(seq++, fragment.RenderValue(context));
+                    builder.AddContent(seq++, GetValue(item, context));
                     builder.CloseElement();
                 }
 
@@ -69,5 +68,31 @@ namespace Crude.Models.LayoutFragments
             builder.CloseElement();
             builder.CloseElement();
         };
+
+        public static RenderFragment GetValue(CrudeProperty property, RenderContext context)
+        {
+            if (property.Type != CrudePropertyType.Field)
+            {
+                throw new ArgumentException($"This method can not be called for {property.Type} fragments");
+            }
+
+            string value;
+
+            switch (property.Value)
+            {
+                case IFormattable formattable:
+                    value = formattable.ToString(null, context.Formatter);
+                    break;
+                case EmptyValue _:
+                    value = RenderContext.EmptyPlaceholder;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            var fragment = new ActionDecoratorFragment(value, property.OnClick);
+
+            return fragment.Render(context);
+        }
     }
 }

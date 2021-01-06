@@ -7,46 +7,46 @@ namespace Crude.Demo.ViewModel
 {
     public class SimpleViewModel
     {
-        [CrudeOrder(2)]
-        public int IntegerFieldOne { get; set; } = 1;
+        //[CrudeOrder(2)]
+        //public int IntegerFieldOne { get; set; } = 1;
 
-        [CrudeOrder(1)]
-        public int IntegerFieldTwo { get; set; } = 2;
+        //[CrudeOrder(1)]
+        //public int IntegerFieldTwo { get; set; } = 2;
 
-        public int IntegerFieldThree { get; set; } = 3;
+        //public int IntegerFieldThree { get; set; } = 3;
 
-        [CrudeIgnore]
-        public int IntegerFieldFour { get; set; } = 4;
+        //[CrudeIgnore]
+        //public int IntegerFieldFour { get; set; } = 4;
 
-        [CrudeName("Floating")]
-        public double DoubleFieldOne { get; set; } = 1.2;
+        //[CrudeName("Floating")]
+        //public double DoubleFieldOne { get; set; } = 1.2;
 
-        public SimpleTable TableFieldOne { get; set; } = new SimpleTable();
+        //public SimpleTable TableFieldOne { get; set; } = new SimpleTable();
 
-        public double? DoubleFieldTwo { get; set; } = null;
+        //public double? DoubleFieldTwo { get; set; } = null;
 
         public string StringFieldOne { get; set; } = "Hello sailor";
 
-        public bool BoolFieldOne { get; set; } = true;
+        //public bool BoolFieldOne { get; set; } = true;
 
-        public SimpleEnum Status { get; set; } = SimpleEnum.Active;
+        //public SimpleEnum Status { get; set; } = SimpleEnum.Active;
 
-        public DateTime Created { get; set; } = DateTime.Now;
+        //public DateTime Created { get; set; } = DateTime.Now;
 
-        public string? StringFieldTwo { get; set; } = null;
+        //public string? StringFieldTwo { get; set; } = null;
 
-        [CrudeOnClick(nameof(Status))]
-        private void OnStatusClick()
-        {
-            if (Status == SimpleEnum.Active)
-            {
-                Status = SimpleEnum.Passive;
-            }
-            else
-            {
-                Status = SimpleEnum.Active;
-            }
-        }
+        //[CrudeOnClick(nameof(Status))]
+        //private void OnStatusClick()
+        //{
+        //    if (Status == SimpleEnum.Active)
+        //    {
+        //        Status = SimpleEnum.Passive;
+        //    }
+        //    else
+        //    {
+        //        Status = SimpleEnum.Active;
+        //    }
+        //}
     }
 
     public class SimpleTable : CrudeTable<SimpleTableViewModel>

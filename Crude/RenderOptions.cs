@@ -1,4 +1,5 @@
 ﻿using Crude.Models.Formatters;
+using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Globalization;
 
@@ -14,14 +15,24 @@ namespace Crude
 
         public int TablePageSize { get; }
 
+        public object ViewModel { get; }
+
         public Action StateHasChanged { get; }
 
-        public RenderContext(Action stateHasChanged, CrudeOptions userOptions)
+        public EditContext EditContext { get; }
+
+        public RenderContext(
+            object viewModel,
+            Action stateHasChanged,
+            CrudeOptions userOptions)
         {
+            ViewModel = viewModel;
             StateHasChanged = stateHasChanged;
 
             TablePageSize = userOptions.TablePageSize;
             Formatter = userOptions.Formatter;
+
+            EditContext = new EditContext(viewModel);
         }
     }
 

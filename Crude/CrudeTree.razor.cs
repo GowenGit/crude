@@ -1,28 +1,23 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Threading.Tasks;
 
 namespace Crude
 {
     public partial class CrudeTree
     {
         [Parameter]
-        public IReadOnlyList<object> ViewModels { get; set; } = new List<object>();
+        public object ViewModel { get; set; } = new object();
 
         [Parameter]
         public CrudeOptions Options { get; set; } = new CrudeOptions(CultureInfo.CurrentCulture);
 
-        private CrudeTreeRenderer? _renderer;
-
-        protected override Task OnInitializedAsync()
+        private RenderFragment Render()
         {
-            foreach (var viewModel in ViewModels)
-            {
-                _renderer = new CrudeTreeRenderer(viewModel);
-            }
+            var renderer = new CrudeTreeRenderer();
 
-            return base.OnInitializedAsync();
+            var context = new RenderContext(ViewModel, StateHasChanged, Options);
+
+            return renderer.Render(context);
         }
     }
 }

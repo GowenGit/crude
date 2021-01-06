@@ -2,25 +2,29 @@
 using Crude.Models.LayoutFragments;
 using Microsoft.AspNetCore.Components;
 using System;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace Crude
 {
     internal class CrudeTreeRenderer
     {
-        private readonly object _viewModel;
-
-        public CrudeTreeRenderer(object viewModel)
+        public RenderFragment Render(RenderContext context) => builder =>
         {
-            _viewModel = viewModel;
-        }
+            var seq = 0;
 
-        public RenderFragment Render(CrudeOptions options, Action notifyStateChange) => builder =>
+            builder.OpenComponent<EditForm>(seq++);
+            builder.AddAttribute(seq++, "EditContext", context.EditContext);
+            builder.AddAttribute(seq++, "ChildContent", RenderFormContents(context));
+            builder.CloseComponent();
+        };
+
+        private static RenderFragment<EditContext> RenderFormContents(RenderContext context) => ctx => builder =>
         {
-            var items = CrudePropertyFactory.Create(_viewModel);
-
-            var context = new RenderContext(notifyStateChange, options);
+            var items = CrudePropertyFactory.Create(context.ViewModel);
 
             var seq = 0;
+
+            builder.OpenElement(seq++, "crude-tree");
 
             foreach (var item in items)
             {
@@ -43,6 +47,8 @@ namespace Crude
                     builder.AddContent(seq++, fragment.Render(context));
                 }
             }
+
+            builder.CloseElement();
         };
 
         private static FieldGroupFragment CreateFieldFragment(CrudeProperty property)
