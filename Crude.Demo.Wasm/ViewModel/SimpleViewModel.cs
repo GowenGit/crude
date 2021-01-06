@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Crude.Core;
 using Crude.Core.Attributes;
 using Crude.Core.Models;
+using Microsoft.AspNetCore.Components.Forms;
 
-namespace Crude.Demo.ViewModel
+namespace Crude.Demo.Wasm.ViewModel
 {
     public class SimpleViewModel
     {

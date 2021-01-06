@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Globalization;
+using Crude.Core;
+using Crude.Core.LayoutFragments;
 
 namespace Crude
 {
@@ -13,7 +15,7 @@ namespace Crude
 
         private RenderFragment Render()
         {
-            var renderer = new CrudeTreeRenderer();
+            var renderer = new CrudeTreeFragment();
 
             var context = new RenderContext(this, ViewModel, Options);
 

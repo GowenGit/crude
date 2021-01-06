@@ -1,6 +1,6 @@
 # Field Types
 
-* [ ] Numeric
+* [x] Numeric
 * [x] Boolean
 * [x] String
 * [x] Enum
@@ -14,7 +14,7 @@
 * [x] Custom table data loader
 * [ ] Custom field formatter
 * [x] Custom onclick event
-* [ ] Edit support
+* [x] Edit support
 * [ ] Table pagination
 * [ ] Table sort
 * [ ] Table search

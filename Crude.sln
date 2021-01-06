@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crude", "Crude\Crude.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crude.Demo", "Crude.Demo\Crude.Demo.csproj", "{B06357A6-57C2-4F14-B046-7269285F6B16}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crude.Demo.Wasm", "Crude.Demo.Wasm\Crude.Demo.Wasm.csproj", "{08D571B8-03D3-45BA-AFA5-69C8715499D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B06357A6-57C2-4F14-B046-7269285F6B16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B06357A6-57C2-4F14-B046-7269285F6B16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B06357A6-57C2-4F14-B046-7269285F6B16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08D571B8-03D3-45BA-AFA5-69C8715499D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08D571B8-03D3-45BA-AFA5-69C8715499D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08D571B8-03D3-45BA-AFA5-69C8715499D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08D571B8-03D3-45BA-AFA5-69C8715499D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
