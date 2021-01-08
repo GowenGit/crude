@@ -39,6 +39,8 @@ namespace Crude.Core.Parsers
                     name = nameAttribute.Name;
                 }
 
+                var disabled = attributes.FirstOrDefault(x => x is CrudeDisableAttribute) is CrudeDisableAttribute _;
+
                 CrudeEvent? onClick = null;
 
                 foreach (var method in methods)
@@ -52,7 +54,7 @@ namespace Crude.Core.Parsers
                     }
                 }
 
-                items.Add(new CrudeProperty(name, order, onClick, property, viewModel));
+                items.Add(new CrudeProperty(name, order, onClick, property, viewModel, disabled));
             }
 
             return items.OrderBy(x => x.Order);
@@ -119,18 +121,22 @@ namespace Crude.Core.Parsers
 
         public object ViewModel { get; }
 
+        public bool Disabled { get; }
+
         public CrudeProperty(
             string name,
             int order,
             CrudeEvent? onClick,
             PropertyInfo info,
-            object viewModel)
+            object viewModel,
+            bool disabled)
         {
             Name = name;
             Order = order;
             OnClick = onClick;
             Info = info;
             ViewModel = viewModel;
+            Disabled = disabled;
 
             if (Info.PropertyType.IsGenericBaseType(typeof(CrudeTable<>)))
             {

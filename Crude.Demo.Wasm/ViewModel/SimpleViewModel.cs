@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Crude.Core;
 using Crude.Core.Attributes;
 using Crude.Core.Models;
 using Microsoft.AspNetCore.Components.Forms;
@@ -16,6 +15,7 @@ namespace Crude.Demo.Wasm.ViewModel
         [CrudeOrder(1)]
         public int IntegerFieldTwo { get; set; } = 2;
 
+        [CrudeDisable]
         public int IntegerFieldThree { get; set; } = 3;
 
         [CrudeIgnore]
@@ -44,10 +44,25 @@ namespace Crude.Demo.Wasm.ViewModel
 
         public string? StringFieldTwo { get; set; } = null;
 
-        [CrudeOnSubmit("Send It")]
+        [CrudeOnSubmit("Submit")]
         private void OnSubmit(EditContext context)
         {
-            Console.WriteLine("asd");
+            Console.WriteLine(context.Validate());
+            Console.WriteLine("send");
+        }
+
+        [CrudeOnButtonClick("Send It")]
+        private void OnSend(EditContext context)
+        {
+            Console.WriteLine(context.Validate());
+            Console.WriteLine("send");
+        }
+
+        [CrudeOnButtonClick("Cancel It")]
+        private void OnCancel(EditContext context)
+        {
+            Console.WriteLine(context.Validate());
+            Console.WriteLine("cancel");
         }
     }
 

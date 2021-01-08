@@ -20,4 +20,22 @@ namespace Crude.Core.Models
             Callback = callback;
         }
     }
+
+    public class CrudeButton
+    {
+        public EventCallback Callback { get; }
+
+        public string Name { get; }
+
+        public CrudeButton(EventCallback callback, string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            Name = name;
+            Callback = callback;
+        }
+    }
 }

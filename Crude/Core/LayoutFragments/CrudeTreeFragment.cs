@@ -1,11 +1,12 @@
-﻿using System;
-using System.Linq;
-using Crude.Core.Attributes;
+﻿using Crude.Core.Attributes;
 using Crude.Core.Fragments;
 using Crude.Core.Models;
 using Crude.Core.Parsers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Crude.Core.LayoutFragments
 {
@@ -22,25 +23,30 @@ namespace Crude.Core.LayoutFragments
 
             if (onSubmit != null)
             {
-                builder.AddAttribute(seq++, "OnSubmit", onSubmit.Callback);
+                builder.AddAttribute(seq++, "OnValidSubmit", onSubmit.Callback);
             }
 
             builder.AddAttribute(seq++, "ChildContent", RenderFormContents(context, onSubmit));
             builder.CloseComponent();
         };
 
-        private static RenderFragment<EditContext> RenderFormContents(RenderContext context, CrudeButton<EditContext>? onSubmit) => ctx => builder =>
+        private RenderFragment<EditContext> RenderFormContents(RenderContext context, CrudeButton<EditContext>? onSubmit) => ctx => builder =>
         {
             var items = ViewModelParser.ParseProperties(context.ViewModel);
 
             var seq = 0;
 
+            builder.OpenElement(seq++, "crude-tree");
+
+            builder.OpenElement(seq++, "crude-tree-header");
+
             builder.OpenComponent<DataAnnotationsValidator>(seq++);
             builder.CloseComponent();
+
             builder.OpenComponent<ValidationSummary>(seq++);
             builder.CloseComponent();
 
-            builder.OpenElement(seq++, "crude-tree");
+            builder.CloseElement();
 
             foreach (var item in items)
             {
@@ -64,6 +70,8 @@ namespace Crude.Core.LayoutFragments
                 }
             }
 
+            builder.OpenElement(seq++, "crude-tree-footer");
+
             if (onSubmit != null)
             {
                 builder.OpenElement(seq++, "button");
@@ -71,6 +79,21 @@ namespace Crude.Core.LayoutFragments
                 builder.AddContent(seq++, onSubmit.Name);
                 builder.CloseElement();
             }
+
+            var onButtonClicks = GetOnClickButtons(context);
+
+            foreach (var onButtonClick in onButtonClicks)
+            {
+                builder.OpenElement(seq++, "button");
+                builder.AddAttribute(seq++, "onclick", onButtonClick.Callback);
+                builder.AddAttribute(seq++, "onclick:preventDefault", "true");
+                builder.AddAttribute(seq++, "onclick:stopPropagation", "true");
+                builder.AddAttribute(seq++, "type", "submit");
+                builder.AddContent(seq++, onButtonClick.Name);
+                builder.CloseElement();
+            }
+
+            builder.CloseElement();
 
             builder.CloseElement();
         };
@@ -106,6 +129,27 @@ namespace Crude.Core.LayoutFragments
             return (IFragment?)fragment;
         }
 
+        private IEnumerable<CrudeButton> GetOnClickButtons(RenderContext context)
+        {
+            var methods = ViewModelParser.ParseMethods(context.ViewModel);
+
+            var result = new List<CrudeButton>();
+
+            foreach (var method in methods)
+            {
+                if (method.Attributes.FirstOrDefault(x => x is CrudeOnButtonClickAttribute) is CrudeOnButtonClickAttribute crudeOnSubmitAttribute)
+                {
+                    var button = new CrudeButton(
+                         context.CreateEvent(() => method.MethodInfo.Invoke(context.ViewModel, new object[] { context.EditContext })),
+                         crudeOnSubmitAttribute.Name);
+
+                    result.Add(button);
+                }
+            }
+
+            return result;
+        }
+
         private CrudeButton<EditContext>? GetOnSubmitButton(RenderContext context)
         {
             var methods = ViewModelParser.ParseMethods(context.ViewModel);
@@ -117,8 +161,8 @@ namespace Crude.Core.LayoutFragments
                 if (method.Attributes.FirstOrDefault(x => x is CrudeOnSubmitAttribute) is CrudeOnSubmitAttribute crudeOnSubmitAttribute)
                 {
                     button = new CrudeButton<EditContext>(
-                         context.CreateEvent<EditContext>(ctx => method.MethodInfo.Invoke(context.ViewModel, new object[] { ctx })),
-                         crudeOnSubmitAttribute.Name);
+                        context.CreateEvent<EditContext>(ctx => method.MethodInfo.Invoke(context.ViewModel, new object[] { ctx })),
+                        crudeOnSubmitAttribute.Name);
                 }
             }
 
