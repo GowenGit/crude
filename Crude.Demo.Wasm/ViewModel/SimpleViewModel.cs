@@ -77,11 +77,12 @@ namespace Crude.Demo.Wasm.ViewModel
 
         public SimpleTable()
         {
+            ElementCount = 27;
             IsSearchable = true;
             IsSortable = true;
         }
 
-        public override IEnumerable<SimpleTableViewModel> GetElements(ulong index, int size, string? unescapedSearchTerm = null)
+        public override IEnumerable<SimpleTableViewModel> GetElements(ulong index, uint size)
         {
             return Rows;
         }

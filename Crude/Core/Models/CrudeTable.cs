@@ -8,6 +8,8 @@ namespace Crude.Core.Models
 
         public bool IsSearchable { get; set; }
 
+        public string? UnescapedSearchTerm { get; set; }
+
         public bool IsSortable { get; set; }
 
         public string? SortColumn { get; set; }
@@ -16,8 +18,6 @@ namespace Crude.Core.Models
 
         public ulong ElementCount { get; set; }
 
-        public abstract IEnumerable<T> GetElements(ulong index, int size, string? unescapedSearchTerm = null);
-
-        //» « First Previous Next Last
+        public abstract IEnumerable<T> GetElements(ulong index, uint size);
     }
 }

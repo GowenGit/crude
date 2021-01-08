@@ -30,14 +30,13 @@ namespace Crude.Core.LayoutFragments
             builder.CloseComponent();
         };
 
-        private RenderFragment<EditContext> RenderFormContents(RenderContext context, CrudeButton<EditContext>? onSubmit) => ctx => builder =>
+        private static RenderFragment<EditContext> RenderFormContents(RenderContext context, CrudeButton<EditContext>? onSubmit) => ctx => builder =>
         {
             var items = ViewModelParser.ParseProperties(context.ViewModel);
 
             var seq = 0;
 
             builder.OpenElement(seq++, "crude-tree");
-
             builder.OpenElement(seq++, "crude-tree-header");
 
             builder.OpenComponent<DataAnnotationsValidator>(seq++);
@@ -80,21 +79,14 @@ namespace Crude.Core.LayoutFragments
                 builder.CloseElement();
             }
 
-            var onButtonClicks = GetOnClickButtons(context);
-
-            foreach (var onButtonClick in onButtonClicks)
+            foreach (var onButtonClick in GetOnClickButtons(context))
             {
-                builder.OpenElement(seq++, "button");
-                builder.AddAttribute(seq++, "onclick", onButtonClick.Callback);
-                builder.AddAttribute(seq++, "onclick:preventDefault", "true");
-                builder.AddAttribute(seq++, "onclick:stopPropagation", "true");
-                builder.AddAttribute(seq++, "type", "submit");
-                builder.AddContent(seq++, onButtonClick.Name);
-                builder.CloseElement();
+                var button = new ButtonFragment(onButtonClick.Name, onButtonClick.Callback, string.Empty, false);
+
+                builder.AddContent(seq++, button.Render(context));
             }
 
             builder.CloseElement();
-
             builder.CloseElement();
         };
 
@@ -129,7 +121,7 @@ namespace Crude.Core.LayoutFragments
             return (IFragment?)fragment;
         }
 
-        private IEnumerable<CrudeButton> GetOnClickButtons(RenderContext context)
+        private static IEnumerable<CrudeButton> GetOnClickButtons(RenderContext context)
         {
             var methods = ViewModelParser.ParseMethods(context.ViewModel);
 
@@ -150,7 +142,7 @@ namespace Crude.Core.LayoutFragments
             return result;
         }
 
-        private CrudeButton<EditContext>? GetOnSubmitButton(RenderContext context)
+        private static CrudeButton<EditContext>? GetOnSubmitButton(RenderContext context)
         {
             var methods = ViewModelParser.ParseMethods(context.ViewModel);
 

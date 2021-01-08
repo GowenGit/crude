@@ -1,8 +1,9 @@
-﻿using System;
-using Crude.Core.Fragments;
+﻿using Crude.Core.Fragments;
 using Crude.Core.Models;
 using Crude.Core.Parsers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
+using System;
 
 namespace Crude.Core.LayoutFragments
 {
@@ -20,6 +21,15 @@ namespace Crude.Core.LayoutFragments
             var seq = 0;
 
             builder.OpenElement(seq++, "crude-table-fragment");
+
+            if (_table.IsSearchable)
+            {
+                builder.OpenElement(seq++, "crude-table-fragment-header");
+
+                BuildSearchBox(ref seq, context, builder);
+
+                builder.CloseElement();
+            }
 
             builder.OpenElement(seq++, "table");
 
@@ -97,10 +107,71 @@ namespace Crude.Core.LayoutFragments
             builder.CloseElement();
 
             builder.CloseElement();
+
+            if (_table.ElementCount > context.TablePageSize)
+            {
+                builder.OpenElement(seq++, "crude-table-fragment-footer");
+
+                BuildPaginationButtons(ref seq, context, builder);
+
+                builder.CloseElement();
+            }
+
             builder.CloseElement();
         };
 
-        public static RenderFragment GetValue(CrudeProperty property, RenderContext context)
+        private void BuildPaginationButtons(ref int seq, RenderContext context, RenderTreeBuilder builder)
+        {
+            var maxPageIndex = _table.ElementCount / context.TablePageSize + (_table.ElementCount % context.TablePageSize > 0 ? (ulong)1 : 0);
+            var minPage = (ulong)Math.Max(0, (long)_table.Page - context.TablePageLookahead);
+            var maxPage = Math.Min(maxPageIndex, _table.Page + context.TablePageLookahead);
+
+            const string tablePaginationButtonCss = "crude-pagination-button";
+
+            if (_table.Page != 0)
+            {
+                var button = CreateButtonFragment("«", () =>
+                {
+                    _table.Page = 0;
+                }, tablePaginationButtonCss, false, context);
+
+                builder.AddContent(seq++, button.Render(context));
+            }
+
+            for (var i = minPage; i <= maxPage; i++)
+            {
+                var pageIndex = i;
+
+                var button = CreateButtonFragment((i + 1).ToString(), () =>
+                {
+                    _table.Page = pageIndex;
+                }, tablePaginationButtonCss, _table.Page == i, context);
+
+                builder.AddContent(seq++, button.Render(context));
+            }
+
+            if (_table.Page < maxPageIndex)
+            {
+                var button = CreateButtonFragment("»", () =>
+                {
+                    _table.Page = maxPageIndex;
+                }, tablePaginationButtonCss, false, context);
+
+                builder.AddContent(seq++, button.Render(context));
+            }
+        }
+
+        private void BuildSearchBox(ref int seq, RenderContext context, RenderTreeBuilder builder)
+        {
+
+        }
+
+        private IFragment CreateButtonFragment(string name, Action action, string cssClass, bool disabled, RenderContext context)
+        {
+            return new ButtonFragment(name, context.CreateEvent(action), cssClass, disabled);
+        }
+
+        private static RenderFragment GetValue(CrudeProperty property, RenderContext context)
         {
             if (property.Type != CrudePropertyType.Field)
             {

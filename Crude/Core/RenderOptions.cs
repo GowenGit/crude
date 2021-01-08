@@ -13,7 +13,9 @@ namespace Crude.Core
 
         internal BaseRenderFormatter Formatter { get; }
 
-        public int TablePageSize { get; }
+        public uint TablePageSize { get; }
+
+        public uint TablePageLookahead { get; }
 
         public IHandleEvent Receiver { get; }
 
@@ -30,6 +32,7 @@ namespace Crude.Core
             ViewModel = viewModel;
 
             TablePageSize = userOptions.TablePageSize;
+            TablePageLookahead = userOptions.TablePageLookahead;
             Formatter = userOptions.Formatter;
 
             EditContext = new EditContext(viewModel);

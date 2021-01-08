@@ -15,6 +15,6 @@
 * [x] Custom field formatter
 * [x] Custom onclick event
 * [x] Edit support
-* [ ] Table pagination
+* [x] Table pagination
 * [x] Table sort
 * [ ] Table search

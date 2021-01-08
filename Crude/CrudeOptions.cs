@@ -8,9 +8,11 @@ namespace Crude
     {
         internal BaseRenderFormatter Formatter { get; }
 
-        public int TablePageSize { get; } = 10;
+        public uint TablePageSize { get; } = 10;
 
-        public CrudeOptions(BaseRenderFormatter formatter, int tablePageSize)
+        public uint TablePageLookahead { get; } = 3;
+
+        public CrudeOptions(BaseRenderFormatter formatter, uint tablePageSize, uint tablePageLookahead)
         {
             if (tablePageSize < 1)
             {
@@ -18,6 +20,7 @@ namespace Crude
             }
 
             TablePageSize = tablePageSize;
+            TablePageLookahead = tablePageLookahead;
             Formatter = formatter;
         }
 
