@@ -84,6 +84,7 @@ namespace Crude.Demo.Wasm.ViewModel
 
         public override IEnumerable<SimpleTableViewModel> GetElements(ulong index, uint size)
         {
+            Console.WriteLine(UnescapedSearchTerm);
             return Rows;
         }
     }

@@ -4,6 +4,9 @@ using Crude.Core.Parsers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
+using System.Linq.Expressions;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace Crude.Core.LayoutFragments
 {
@@ -163,10 +166,37 @@ namespace Crude.Core.LayoutFragments
 
         private void BuildSearchBox(ref int seq, RenderContext context, RenderTreeBuilder builder)
         {
+            const string tableSearchButtonCss = "crude-search-button";
 
+            builder.OpenComponent<InputText>(seq++);
+
+            Expression<Func<string?>> expression = () => _table.UnescapedSearchTerm;
+
+            void OnEnter(KeyboardEventArgs e)
+            {
+                // If enter is pressed invoke StateHasChanged event to trigger
+                // component render so we fetch table results again
+                // otherwise make sure that we do not re-render
+                if (e.Code == "Enter" || e.Code == "NumpadEnter")
+                {
+                    context.StateHasChanged();
+                }
+            }
+
+            builder.AddAttribute(seq++, "Placeholder", context.TableSearchPlaceholder);
+            builder.AddAttribute(seq++, "Value", _table.UnescapedSearchTerm);
+            builder.AddAttribute(seq++, "ValueChanged", EventCallback.Factory.Create<string>(this, value => _table.UnescapedSearchTerm = value));
+            builder.AddAttribute(seq++, "ValueExpression", expression);
+            builder.AddAttribute(seq++, "onkeydown", (Action<KeyboardEventArgs>) OnEnter);
+
+            builder.CloseComponent();
+
+            var button = CreateButtonFragment(context.TableFindButton, () => { }, tableSearchButtonCss, false, context);
+
+            builder.AddContent(seq++, button.Render(context));
         }
 
-        private IFragment CreateButtonFragment(string name, Action action, string cssClass, bool disabled, RenderContext context)
+        private static IFragment CreateButtonFragment(string name, Action action, string cssClass, bool disabled, RenderContext context)
         {
             return new ButtonFragment(name, context.CreateEvent(action), cssClass, disabled);
         }

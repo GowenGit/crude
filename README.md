@@ -17,4 +17,4 @@
 * [x] Edit support
 * [x] Table pagination
 * [x] Table sort
-* [ ] Table search
+* [x] Table search

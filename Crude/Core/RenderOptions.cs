@@ -17,22 +17,33 @@ namespace Crude.Core
 
         public uint TablePageLookahead { get; }
 
-        public IHandleEvent Receiver { get; }
+        public string TableSearchPlaceholder { get; }
+
+        public string TableFindButton { get; }
+
+        public ComponentBase Receiver { get; }
 
         public object ViewModel { get; }
 
         public EditContext EditContext { get; }
 
+        public Action StateHasChanged { get; }
+
         public RenderContext(
-            IHandleEvent receiver,
+            ComponentBase receiver,
+            Action stateHasChanged,
             object viewModel,
             CrudeOptions userOptions)
         {
             Receiver = receiver;
+            StateHasChanged = stateHasChanged;
             ViewModel = viewModel;
 
             TablePageSize = userOptions.TablePageSize;
             TablePageLookahead = userOptions.TablePageLookahead;
+            TableSearchPlaceholder = userOptions.TableSearchPlaceholder;
+            TableFindButton = userOptions.TableFindButton;
+
             Formatter = userOptions.Formatter;
 
             EditContext = new EditContext(viewModel);
