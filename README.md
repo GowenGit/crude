@@ -16,5 +16,5 @@
 * [x] Custom onclick event
 * [x] Edit support
 * [ ] Table pagination
-* [ ] Table sort
+* [x] Table sort
 * [ ] Table search

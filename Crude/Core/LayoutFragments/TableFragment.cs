@@ -38,7 +38,36 @@ namespace Crude.Core.LayoutFragments
             foreach (var item in items)
             {
                 builder.OpenElement(seq++, "th");
-                builder.AddContent(seq++, item.Name.ToString(context.Formatter));
+
+                CrudeEvent? sortEvent = null;
+
+                if (_table.IsSortable)
+                {
+                    sortEvent = new CrudeEvent(() =>
+                    {
+                        if (_table.SortColumn == item.Info.Name)
+                        {
+                            _table.SortDescending = !_table.SortDescending;
+                        }
+                        else
+                        {
+                            _table.SortColumn = item.Info.Name;
+                            _table.SortDescending = false;
+                        }
+                    });
+                }
+
+                var header = new ActionDecoratorFragment(item.Name, sortEvent);
+
+                builder.AddContent(seq++, header.Render(context));
+
+                if (item.Info.Name == _table.SortColumn)
+                {
+                    builder.OpenElement(seq++, "crude-table-sort-icon");
+                    builder.AddAttribute(seq++, "class", _table.SortDescending ? "sort-desc" : "sort-asc");
+                    builder.CloseElement();
+                }
+
                 builder.CloseElement();
             }
 

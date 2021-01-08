@@ -4,8 +4,20 @@ namespace Crude.Core.Models
 {
     public abstract class CrudeTable<T> where T : class
     {
-        public int Page { get; set; }
+        public ulong Page { get; set; }
 
-        public abstract IEnumerable<T> GetElements(int index, int size);
+        public bool IsSearchable { get; set; }
+
+        public bool IsSortable { get; set; }
+
+        public string? SortColumn { get; set; }
+
+        public bool SortDescending { get; set; }
+
+        public ulong ElementCount { get; set; }
+
+        public abstract IEnumerable<T> GetElements(ulong index, int size, string? unescapedSearchTerm = null);
+
+        //» « First Previous Next Last
     }
 }

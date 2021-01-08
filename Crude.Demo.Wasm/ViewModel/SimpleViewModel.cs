@@ -75,7 +75,13 @@ namespace Crude.Demo.Wasm.ViewModel
             new SimpleTableViewModel()
         };
 
-        public override IEnumerable<SimpleTableViewModel> GetElements(int index, int size)
+        public SimpleTable()
+        {
+            IsSearchable = true;
+            IsSortable = true;
+        }
+
+        public override IEnumerable<SimpleTableViewModel> GetElements(ulong index, int size, string? unescapedSearchTerm = null)
         {
             return Rows;
         }

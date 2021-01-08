@@ -45,8 +45,15 @@ crude-field-fragment, crude-table-fragment {
         text-align: left;
     }
 
-/*Fields*/
+crude-table-sort-icon.sort-asc:after {
+    content: ' \25B2';
+}
 
+crude-table-sort-icon.sort-desc:after {
+    content: ' \25BC';
+}
+
+/*Fields*/
 crude-field-fragment > * {
     display: block;
 }
