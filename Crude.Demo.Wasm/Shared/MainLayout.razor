@@ -1,7 +1,32 @@
 @inherits LayoutComponentBase
 
-<div class="page">
-    <div class="main">
+<div class="app">
+    <div class="pure-menu pure-menu-horizontal">
+        <a href="#" class="pure-menu-heading"><img style="height: 34px" src="assets/logo_large.svg" alt="Logo"/></a>
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item">
+                <NavLink href="documentation" class="pure-menu-link">Documentation</NavLink>
+            </li>
+            <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                <a href="#" class="pure-menu-link">Examples</a>
+                <ul class="pure-menu-children">
+                    <li class="pure-menu-item">
+                        <NavLink href="example-simple-registration-form" class="pure-menu-link">Registration</NavLink>
+                    </li>
+                    <li class="pure-menu-item">
+                        <a href="#" class="pure-menu-link">Twitter</a>
+                    </li>
+                    <li class="pure-menu-item">
+                        <a href="#" class="pure-menu-link">Tumblr Blog</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="pure-menu-item">
+                <a href="https://github.com/GowenGit/crude" class="pure-menu-link">GitHub</a>
+            </li>
+        </ul>
+    </div>
+    <div>
         @Body
     </div>
 </div>
