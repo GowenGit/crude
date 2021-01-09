@@ -22,6 +22,11 @@ h1.main-text {
     margin: 75px;
 }
 
+h2.main-text {
+    text-align: center;
+    margin: 35px;
+}
+
 .app {
     max-width: 60rem;
     padding: 2rem;
@@ -53,4 +58,41 @@ p {
 
 .center-buttons a {
     margin: 10px;
+}
+
+#brand {
+    padding: 0;
+}
+
+.validation-message {
+    color: red;
+    font-size: 0.6em;
+}
+
+ul.validation-errors {
+    list-style-type: square;
+    padding-left: 13px;
+}
+
+crude-field-fragment input:not([type=checkbox]) {
+    width: 100%
+}
+
+crude-field-fragment label {
+    font-size: 0.8em;
+    font-weight: 600;
+}
+
+table {
+    font-size: 0.8em;
+}
+
+.example-simple-registration-form {
+    --grid-setup: auto / auto auto;
+    --grid-full-span: 1 / span 2
+}
+
+.example-simple-login-form {
+    --grid-setup: auto / auto;
+    --grid-full-span: 1 / span 1
 }

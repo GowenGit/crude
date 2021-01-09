@@ -1,27 +1,29 @@
 ﻿/* Top Level Grid */
 
+:root {
+    --grid-setup: auto / auto auto auto;
+    --grid-full-span: 1 / span 3
+}
+
 crude-tree {
     display: grid;
     grid-gap: 15px;
-
-    align-items: center;
+    align-items: start;
     justify-content: space-evenly;
-
-    grid-template: auto / auto auto auto;
-}
-
-crude-field-fragment {
-    align-self: center;
+    grid-template: var(--grid-setup, auto / auto auto auto);
 }
 
 crude-table-fragment {
-    align-self: center;
-    grid-column: 1 / span 3;
+    grid-column: var(--grid-full-span, 1 / span 3);
 }
 
-/*crude-field-fragment, crude-table-fragment {
-    border: 1px solid black;
-}*/
+crude-tree-header {
+    grid-column: var(--grid-full-span, 1 / span 3);
+}
+
+crude-tree-footer {
+    grid-column: var(--grid-full-span, 1 / span 3);
+}
 
 /* Tables */
     crude-table-fragment table {
@@ -68,16 +70,4 @@ crude-field-fragment > * {
 
 input:not([type=checkbox]), select {
     min-width: 150px;
-}
-
-/*Headers/Footers*/
-
-crude-tree-header {
-    align-self: center;
-    grid-column: 1 / span 3;
-}
-
-crude-tree-footer {
-    align-self: center;
-    grid-column: 1 / span 3;
 }

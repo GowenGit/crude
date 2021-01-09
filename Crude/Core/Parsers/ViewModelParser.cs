@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Crude.Core.Attributes;
+using Crude.Core.Models;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using Crude.Core.Attributes;
-using Crude.Core.Models;
 
 namespace Crude.Core.Parsers
 {
@@ -35,12 +36,19 @@ namespace Crude.Core.Parsers
 
                 var name = property.Name;
 
-                if (attributes.FirstOrDefault(x => x is CrudeNameAttribute) is CrudeNameAttribute nameAttribute)
+                if (property.GetCustomAttributes(typeof(DisplayAttribute)).FirstOrDefault(x => x is DisplayAttribute) is DisplayAttribute displayAttribute)
                 {
-                    name = nameAttribute.Name;
+                    var displayName = displayAttribute.GetName();
+
+                    if (displayName != null)
+                    {
+                        name = displayName;
+                    }
                 }
 
                 var disabled = attributes.FirstOrDefault(x => x is CrudeDisableAttribute) is CrudeDisableAttribute _;
+
+                var password = attributes.FirstOrDefault(x => x is CrudePasswordAttribute) is CrudePasswordAttribute _;
 
                 CrudeEvent? onClick = null;
 
@@ -55,7 +63,7 @@ namespace Crude.Core.Parsers
                     }
                 }
 
-                items.Add(new CrudeProperty(name, order, onClick, property, viewModel, disabled));
+                items.Add(new CrudeProperty(name, order, onClick, property, viewModel, disabled, password));
             }
 
             return items.OrderBy(x => x.Order);
@@ -124,13 +132,16 @@ namespace Crude.Core.Parsers
 
         public bool Disabled { get; }
 
+        public bool Password { get; }
+
         public CrudeProperty(
             string name,
             int order,
             CrudeEvent? onClick,
             PropertyInfo info,
             object viewModel,
-            bool disabled)
+            bool disabled,
+            bool password)
         {
             Name = name;
             Order = order;
@@ -138,6 +149,7 @@ namespace Crude.Core.Parsers
             Info = info;
             ViewModel = viewModel;
             Disabled = disabled;
+            Password = password;
 
             if (Info.PropertyType.IsGenericBaseType(typeof(CrudeTable<>)))
             {

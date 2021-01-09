@@ -21,7 +21,7 @@ namespace Crude.Demo.Wasm.ViewModel
         [CrudeIgnore]
         public int IntegerFieldFour { get; set; } = 4;
 
-        [CrudeName("Floating")]
+        [Display(Name = "Floating")]
         public double DoubleFieldOne { get; set; } = 1.2;
 
         public SimpleTable TableFieldOne { get; set; } = new SimpleTable();
@@ -44,6 +44,9 @@ namespace Crude.Demo.Wasm.ViewModel
 
         public string? StringFieldTwo { get; set; } = null;
 
+        [CrudePassword]
+        public string StringFieldThree { get; set; }
+        
         [CrudeOnSubmit("Submit")]
         private void OnSubmit(EditContext context)
         {
@@ -93,7 +96,7 @@ namespace Crude.Demo.Wasm.ViewModel
     {
         public int TableIntegerFieldOne { get; set; } = 1;
 
-        [CrudeName("Id")]
+        [Display(Name = "Id")]
         [CrudeOrder(1)]
         public int TableIntegerFieldTwo { get; set; } = 2;
 
@@ -102,7 +105,7 @@ namespace Crude.Demo.Wasm.ViewModel
 
         public int TableIntegerFieldFour { get; set; } = 4;
 
-        [CrudeName("Description")]
+        [Display(Name = "Description")]
         public string TableStringFieldOne { get; set; } = "Lorem Ipsum";
 
         [CrudeOnClick(nameof(TableStringFieldOne))]

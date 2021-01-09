@@ -1,5 +1,87 @@
 ﻿@page "/example-simple-registration-form"
 
+@inject IJSRuntime JsRuntime
+
 <h1 class="main-text">Simple Registration Form</h1>
 
-<CrudeTree ViewModel="new SimpleViewModel()" />
+<div class="example-simple-registration-form">
+    <CrudeTree ViewModel="new RegistrationViewModel()" />
+</div>
+
+<div class="content">
+    <h2 class="main-text">Show me the code</h2>
+
+    <p>
+        We change the CSS so we have two column layout first.
+    </p>
+
+    <CodeBlock Value="@Css" />
+    
+    <p>
+        Now we define our view model.
+    </p>
+    
+    <CodeBlock Value="@Csharp" />
+    
+    <p>
+        And finally we add a blazor component.
+    </p>
+
+    <CodeBlock Value="@Html" />
+</div>
+
+
+@code {
+    private const string Html = @"
+<div class=""example-simple-registration-form"" >
+    <CrudeTree ViewModel=""new RegistrationViewModel()"" />
+</div>";
+
+    private const string Css = @"
+.example-simple-registration-form {
+    --grid-setup: auto / auto auto;
+    --grid-full-span: 1 / span 2
+}";
+
+    private const string Csharp = @"
+public class RegistrationViewModel
+{
+    [Required]
+    [Display(Name = ""Display Name"")]
+    [StringLength(20, MinimumLength = 2)]
+    public string Name { get; set; }
+
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
+
+    [CrudePassword]
+    [Required]
+    [MinLength(6)]
+    [Display(Name = ""Password"")]
+    public string Password { get; set; }
+
+    [CrudePassword]
+    [Required]
+    [Display(Name = ""Re-type Password"")]
+    [Compare(nameof(Password))]
+    public string PasswordConfirm { get; set; }
+
+    [CrudeOnSubmit(""Register"")]
+    private void OnRegister(EditContext context)
+    {
+        Console.WriteLine(""Register button clicked"");
+    }
+
+    [CrudeOnButtonClick(""Login"")]
+    private void OnLogin(EditContext context)
+    {
+        Console.WriteLine(""Login button clicked"");
+    }
+}";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JsRuntime.InvokeVoidAsync("Highlight");
+    }
+}

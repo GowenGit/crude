@@ -57,6 +57,11 @@ namespace Crude.Core.FieldFragments
             builder.AddAttribute(seq++, "id", Identifier);
             builder.AddAttribute(seq++, "disabled", Property.Disabled);
 
+            if (Property.Password && typeof(T) == typeof(string))
+            {
+                builder.AddAttribute(seq++, "type", "password");
+            }
+
             // Close input
             builder.CloseComponent();
 
