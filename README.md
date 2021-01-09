@@ -1,6 +1,9 @@
 ![CRUDe](Crude.Demo.Wasm/wwwroot/assets/logo_large.svg)
 
-# A lightweight *Blazor* component to auto generate *CRUD* forms and list views.
+![Deploy](https://github.com/GowenGit/crude/workflows/Deploy/badge.svg?branch=master)
+<!-- [![NuGet](https://img.shields.io/nuget/v/Crude.svg)](https://www.nuget.org/packages/Crude) -->
+
+# A lightweight **Blazor** component to auto generate **CRUD** forms and list views.
 
 *CRUD.e* is a simple NuGet package you can drop into your existing Blazor projects and it will generate all the boilerplate CRUD code for you.
 
