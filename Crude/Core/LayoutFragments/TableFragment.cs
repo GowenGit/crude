@@ -10,7 +10,8 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace Crude.Core.LayoutFragments
 {
-    internal class TableFragment<T> : IFragment where T : class
+    internal class TableFragment<T> : IFragment
+        where T : class
     {
         private readonly CrudeTable<T> _table;
 
@@ -125,7 +126,7 @@ namespace Crude.Core.LayoutFragments
 
         private void BuildPaginationButtons(ref int seq, RenderContext context, RenderTreeBuilder builder)
         {
-            var maxPageIndex = _table.ElementCount / context.TablePageSize + (_table.ElementCount % context.TablePageSize > 0 ? (ulong)1 : 0);
+            var maxPageIndex = _table.ElementCount / context.TablePageSize + (_table.ElementCount % context.TablePageSize > 0 ? 1UL : 0UL);
             var minPage = (ulong)Math.Max(0, (long)_table.Page - context.TablePageLookahead);
             var maxPage = Math.Min(maxPageIndex, _table.Page + context.TablePageLookahead);
 
@@ -133,10 +134,15 @@ namespace Crude.Core.LayoutFragments
 
             if (_table.Page != 0)
             {
-                var button = CreateButtonFragment("«", () =>
-                {
-                    _table.Page = 0;
-                }, tablePaginationButtonCss, false, context);
+                var button = CreateButtonFragment(
+                    "«",
+                    () =>
+                    {
+                        _table.Page = 0;
+                    },
+                    tablePaginationButtonCss,
+                    false,
+                    context);
 
                 builder.AddContent(seq++, button.Render(context));
             }
@@ -145,20 +151,30 @@ namespace Crude.Core.LayoutFragments
             {
                 var pageIndex = i;
 
-                var button = CreateButtonFragment((i + 1).ToString(), () =>
-                {
-                    _table.Page = pageIndex;
-                }, tablePaginationButtonCss, _table.Page == i, context);
+                var button = CreateButtonFragment(
+                    (i + 1).ToString(),
+                    () =>
+                    {
+                        _table.Page = pageIndex;
+                    },
+                    tablePaginationButtonCss,
+                    _table.Page == i,
+                    context);
 
                 builder.AddContent(seq++, button.Render(context));
             }
 
             if (_table.Page < maxPageIndex)
             {
-                var button = CreateButtonFragment("»", () =>
-                {
-                    _table.Page = maxPageIndex;
-                }, tablePaginationButtonCss, false, context);
+                var button = CreateButtonFragment(
+                    "»",
+                    () =>
+                    {
+                        _table.Page = maxPageIndex;
+                    },
+                    tablePaginationButtonCss,
+                    false,
+                    context);
 
                 builder.AddContent(seq++, button.Render(context));
             }
@@ -187,7 +203,7 @@ namespace Crude.Core.LayoutFragments
             builder.AddAttribute(seq++, "Value", _table.UnescapedSearchTerm);
             builder.AddAttribute(seq++, "ValueChanged", EventCallback.Factory.Create<string>(this, value => _table.UnescapedSearchTerm = value));
             builder.AddAttribute(seq++, "ValueExpression", expression);
-            builder.AddAttribute(seq++, "onkeydown", (Action<KeyboardEventArgs>) OnEnter);
+            builder.AddAttribute(seq++, "onkeydown", (Action<KeyboardEventArgs>)OnEnter);
 
             builder.CloseComponent();
 

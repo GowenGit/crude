@@ -1,4 +1,4 @@
 ﻿namespace Crude.Core.Attributes
 {
-    public class CrudeIgnoreAttribute : CrudePropertyAttribute {}
+    public sealed class CrudeIgnoreAttribute : CrudePropertyAttribute {}
 }

@@ -2,7 +2,7 @@
 
 namespace Crude.Core.Attributes
 {
-    public class CrudeOrderAttribute : CrudePropertyAttribute
+    public sealed class CrudeOrderAttribute : CrudePropertyAttribute
     {
         public int Order { get; }
 

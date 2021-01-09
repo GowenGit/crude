@@ -22,6 +22,7 @@ namespace Crude.Demo.Wasm
 }
 
 // Shift+Alt+d
+// https://highlightjs.org/
 
 //name: Deploy to GitHub Pages
 

@@ -1,6 +1,6 @@
 ﻿namespace Crude.Core.Attributes
 {
-    public class CrudeNameAttribute : CrudePropertyAttribute
+    public sealed class CrudeNameAttribute : CrudePropertyAttribute
     {
         public string Name { get; }
 

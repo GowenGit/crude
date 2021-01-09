@@ -19,9 +19,9 @@ crude-table-fragment {
     grid-column: 1 / span 3;
 }
 
-crude-field-fragment, crude-table-fragment {
+/*crude-field-fragment, crude-table-fragment {
     border: 1px solid black;
-}
+}*/
 
 /* Tables */
     crude-table-fragment table {

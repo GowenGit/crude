@@ -2,8 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <NoWarn>1591</NoWarn>
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+    <version>$(VersionSuffix)</version>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <Authors>Modestas Petravicius</Authors>
+    <Product>Crude</Product>
+    <Description>Crude is a simple Blazor framework to render CRUD interfaces.</Description>
+    <Copyright>MIT</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/GowenGit/crude</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/GowenGit/crude</RepositoryUrl>
+    <PackageTags>Blazor; Component; CRUD</PackageTags>
+    <PackageIcon>icon.png</PackageIcon>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   
@@ -12,7 +30,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="../Crude.Demo.Wasm/wwwroot/assets/icon.png" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.1" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="Obsessive.Defender" Version="1.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Crude.Core.Attributes;
@@ -49,7 +50,7 @@ namespace Crude.Core.Parsers
                     {
                         if (onClickAttribute.Property == property.Name)
                         {
-                            onClick = new CrudeEvent(() => method.MethodInfo.Invoke(viewModel, new object[] { }));
+                            onClick = new CrudeEvent(() => method.MethodInfo.Invoke(viewModel, Array.Empty<object>()));
                         }
                     }
                 }

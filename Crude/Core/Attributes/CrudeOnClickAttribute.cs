@@ -2,7 +2,7 @@
 
 namespace Crude.Core.Attributes
 {
-    public class CrudeOnClickAttribute : CrudeMethodAttribute
+    public sealed class CrudeOnClickAttribute : CrudeMethodAttribute
     {
         public string Property { get; }
 

@@ -2,7 +2,8 @@
 
 namespace Crude.Core.Models
 {
-    public abstract class CrudeTable<T> where T : class
+    public abstract class CrudeTable<T>
+        where T : class
     {
         public ulong Page { get; set; }
 

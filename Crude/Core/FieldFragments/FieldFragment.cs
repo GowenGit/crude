@@ -24,7 +24,7 @@ namespace Crude.Core.FieldFragments
         public abstract RenderFragment Render(RenderContext context);
 
         /// <summary>
-        /// We use this to handle both nullable and regular value types
+        /// We use this to handle both nullable and regular value types.
         /// </summary>
         protected void AddFieldAttributesByType(ref int seq, RenderTreeBuilder builder, Type? type = null)
         {
@@ -49,8 +49,6 @@ namespace Crude.Core.FieldFragments
             var expression = Expression.Lambda<Func<T>>(property);
 
             var valueChanged = EventCallback.Factory.Create<T>(this, value => Property.SetValue(value));
-
-            //var identifier = FieldIdentifier.Create(expression);
 
             builder.AddAttribute(seq++, "Placeholder", Property.Name);
             builder.AddAttribute(seq++, "Value", Property.GetValue());

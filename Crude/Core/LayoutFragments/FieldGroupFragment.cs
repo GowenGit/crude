@@ -116,7 +116,7 @@ namespace Crude.Core.LayoutFragments
                 .GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance)
                 .First();
 
-            return (FieldFragment) ctor.Invoke(new object?[] { property });
+            return (FieldFragment)ctor.Invoke(new object?[] { property });
         }
     }
 }

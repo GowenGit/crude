@@ -2,7 +2,7 @@
 
 namespace Crude.Core.Attributes
 {
-    public class CrudeOnSubmitAttribute : CrudeMethodAttribute
+    public sealed class CrudeOnSubmitAttribute : CrudeMethodAttribute
     {
         public string Name { get; }
 
