@@ -2,11 +2,10 @@
 using Crude.Core.Models;
 using Crude.Core.Parsers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Linq.Expressions;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Web;
 
 namespace Crude.Core.LayoutFragments
 {
@@ -90,7 +89,7 @@ namespace Crude.Core.LayoutFragments
 
             builder.OpenElement(seq++, "tbody");
 
-            var elements = _table.GetElements(_table.Page, context.TablePageSize);
+            var elements = _table.GetElements();
 
             foreach (var element in elements)
             {
@@ -112,11 +111,13 @@ namespace Crude.Core.LayoutFragments
 
             builder.CloseElement();
 
-            if (_table.ElementCount > context.TablePageSize)
+            var elementCount = _table.GetTotalElementCount();
+
+            if (elementCount > _table.TablePageSize)
             {
                 builder.OpenElement(seq++, "crude-table-fragment-footer");
 
-                BuildPaginationButtons(ref seq, context, builder);
+                BuildPaginationButtons(ref seq, elementCount, context, builder);
 
                 builder.CloseElement();
             }
@@ -124,11 +125,11 @@ namespace Crude.Core.LayoutFragments
             builder.CloseElement();
         };
 
-        private void BuildPaginationButtons(ref int seq, RenderContext context, RenderTreeBuilder builder)
+        private void BuildPaginationButtons(ref int seq, ulong elementCount, RenderContext context, RenderTreeBuilder builder)
         {
-            var maxPageIndex = _table.ElementCount / context.TablePageSize + (_table.ElementCount % context.TablePageSize > 0 ? 1UL : 0UL);
-            var minPage = (ulong)Math.Max(0, (long)_table.Page - context.TablePageLookahead);
-            var maxPage = Math.Min(maxPageIndex, _table.Page + context.TablePageLookahead);
+            var maxPageIndex = elementCount / _table.TablePageSize - (elementCount % _table.TablePageSize > 0 ? 0UL : 1UL);
+            var minPage = (ulong)Math.Max(0, (long)_table.Page - _table.TablePageLookahead);
+            var maxPage = Math.Min(maxPageIndex, _table.Page + _table.TablePageLookahead);
 
             const string tablePaginationButtonCss = "crude-pagination-button";
 
@@ -188,26 +189,26 @@ namespace Crude.Core.LayoutFragments
 
             Expression<Func<string?>> expression = () => _table.UnescapedSearchTerm;
 
-            void OnEnter(KeyboardEventArgs e)
-            {
-                // If enter is pressed invoke StateHasChanged event to trigger
-                // component render so we fetch table results again
-                // otherwise make sure that we do not re-render
-                if (e.Code == "Enter" || e.Code == "NumpadEnter")
-                {
-                    context.StateHasChanged();
-                }
-            }
-
-            builder.AddAttribute(seq++, "Placeholder", context.TableSearchPlaceholder);
+            // TODO: A bug with DOM distroying elements when this event is called.
+            // void OnEnter(KeyboardEventArgs e)
+            // {
+            //     // If enter is pressed invoke StateHasChanged event to trigger
+            //     // component render so we fetch table results again
+            //     // otherwise make sure that we do not re-render
+            //     if (e.Code == "Enter" || e.Code == "NumpadEnter")
+            //     {
+            //         context.StateHasChanged();
+            //     }
+            // }
+            // builder.AddAttribute(seq++, "onkeydown", (Action<KeyboardEventArgs>)OnEnter);
+            builder.AddAttribute(seq++, "Placeholder", _table.TableSearchPlaceholder);
             builder.AddAttribute(seq++, "Value", _table.UnescapedSearchTerm);
             builder.AddAttribute(seq++, "ValueChanged", EventCallback.Factory.Create<string>(this, value => _table.UnescapedSearchTerm = value));
             builder.AddAttribute(seq++, "ValueExpression", expression);
-            builder.AddAttribute(seq++, "onkeydown", (Action<KeyboardEventArgs>)OnEnter);
 
             builder.CloseComponent();
 
-            var button = CreateButtonFragment(context.TableFindButton, () => { }, tableSearchButtonCss, false, context);
+            var button = CreateButtonFragment(_table.TableFindButton, () => { _table.Page = 0UL; }, tableSearchButtonCss, false, context);
 
             builder.AddContent(seq++, button.Render(context));
         }

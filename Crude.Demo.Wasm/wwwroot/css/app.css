@@ -60,6 +60,10 @@ p {
     margin: 10px;
 }
 
+code {
+    background-color: #f8f8f8;
+}
+
 #brand {
     padding: 0;
 }
@@ -85,6 +89,19 @@ crude-field-fragment label {
 
 table {
     font-size: 0.8em;
+}
+
+a {
+    color: #56cbf9;
+    cursor: pointer;
+}
+
+td a {
+    font-weight: 600;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 .example-simple-registration-form {

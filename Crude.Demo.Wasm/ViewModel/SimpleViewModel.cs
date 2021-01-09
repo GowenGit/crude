@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using Crude.Core.Attributes;
+﻿using Crude.Core.Attributes;
 using Crude.Core.Models;
 using Microsoft.AspNetCore.Components.Forms;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Crude.Demo.Wasm.ViewModel
 {
@@ -46,7 +46,7 @@ namespace Crude.Demo.Wasm.ViewModel
 
         [CrudePassword]
         public string StringFieldThree { get; set; }
-        
+
         [CrudeOnSubmit("Submit")]
         private void OnSubmit(EditContext context)
         {
@@ -78,14 +78,14 @@ namespace Crude.Demo.Wasm.ViewModel
             new SimpleTableViewModel()
         };
 
-        public SimpleTable()
+        public SimpleTable() : base(true, true) { }
+
+        public override ulong GetTotalElementCount()
         {
-            ElementCount = 27;
-            IsSearchable = true;
-            IsSortable = true;
+            return 27;
         }
 
-        public override IEnumerable<SimpleTableViewModel> GetElements(ulong index, uint size)
+        public override IEnumerable<SimpleTableViewModel> GetElements()
         {
             Console.WriteLine(UnescapedSearchTerm);
             return Rows;

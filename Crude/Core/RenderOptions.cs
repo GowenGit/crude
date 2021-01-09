@@ -13,14 +13,6 @@ namespace Crude.Core
 
         internal BaseRenderFormatter Formatter { get; }
 
-        public uint TablePageSize { get; }
-
-        public uint TablePageLookahead { get; }
-
-        public string TableSearchPlaceholder { get; }
-
-        public string TableFindButton { get; }
-
         public ComponentBase Receiver { get; }
 
         public object ViewModel { get; }
@@ -38,11 +30,6 @@ namespace Crude.Core
             Receiver = receiver;
             StateHasChanged = stateHasChanged;
             ViewModel = viewModel;
-
-            TablePageSize = userOptions.TablePageSize;
-            TablePageLookahead = userOptions.TablePageLookahead;
-            TableSearchPlaceholder = userOptions.TableSearchPlaceholder;
-            TableFindButton = userOptions.TableFindButton;
 
             Formatter = userOptions.Formatter;
 
