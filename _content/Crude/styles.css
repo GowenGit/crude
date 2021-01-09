@@ -1,0 +1,73 @@
+﻿/* Top Level Grid */
+
+:root {
+    --grid-setup: auto / auto auto auto;
+    --grid-full-span: 1 / span 3
+}
+
+crude-tree {
+    display: grid;
+    grid-gap: 15px;
+    align-items: start;
+    justify-content: space-evenly;
+    grid-template: var(--grid-setup, auto / auto auto auto);
+}
+
+crude-table-fragment {
+    grid-column: var(--grid-full-span, 1 / span 3);
+}
+
+crude-tree-header {
+    grid-column: var(--grid-full-span, 1 / span 3);
+}
+
+crude-tree-footer {
+    grid-column: var(--grid-full-span, 1 / span 3);
+}
+
+/* Tables */
+    crude-table-fragment table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    crude-table-fragment tr:nth-of-type(odd) {
+        background: #eee;
+    }
+
+    crude-table-fragment th {
+        background: #333;
+        color: white;
+        font-weight: bold;
+    }
+
+    crude-table-fragment td, th {
+        padding: 6px;
+        border: 1px solid #ccc;
+        text-align: left;
+    }
+
+crude-table-sort-icon.sort-asc:after {
+    content: ' \25B2';
+}
+
+crude-table-sort-icon.sort-desc:after {
+    content: ' \25BC';
+}
+
+crude-table-fragment-footer {
+    display: block;
+}
+
+crude-table-fragment-header {
+    display: block;
+}
+
+/*Fields*/
+crude-field-fragment > * {
+    display: block;
+}
+
+input:not([type=checkbox]), select {
+    min-width: 150px;
+}

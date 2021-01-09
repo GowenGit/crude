@@ -1,0 +1,115 @@
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
+
+h1.main-text {
+    text-align: center;
+    margin: 75px;
+}
+
+h2.main-text {
+    text-align: center;
+    margin: 35px;
+}
+
+.app {
+    max-width: 60rem;
+    padding: 2rem;
+    margin: auto;
+}
+
+html {
+    color: #777;
+    font-size: 1.125em;
+    line-height: 1.6;
+    letter-spacing: .01em;
+}
+
+.content {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 48em;
+}
+
+p {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.center-buttons {
+    text-align: center;
+    margin-top: 35px;
+}
+
+.center-buttons a {
+    margin: 10px;
+}
+
+code {
+    background-color: #f8f8f8;
+}
+
+#brand {
+    padding: 0;
+}
+
+.validation-message {
+    color: red;
+    font-size: 0.6em;
+}
+
+ul.validation-errors {
+    list-style-type: square;
+    padding-left: 13px;
+}
+
+crude-field-fragment input:not([type=checkbox]) {
+    width: 100%
+}
+
+crude-field-fragment label {
+    font-size: 0.8em;
+    font-weight: 600;
+}
+
+table {
+    font-size: 0.8em;
+}
+
+a {
+    color: #56cbf9;
+    cursor: pointer;
+}
+
+td a {
+    font-weight: 600;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.example-simple-registration-form {
+    --grid-setup: auto / auto auto;
+    --grid-full-span: 1 / span 2
+}
+
+.example-simple-login-form {
+    --grid-setup: auto / auto;
+    --grid-full-span: 1 / span 1
+}
