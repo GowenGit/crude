@@ -1,3 +1,102 @@
 ﻿@page "/documentation"
 
 <h1 class="main-text">Documentation</h1>
+
+<div class="content">
+    <p>
+        <b>CRUD.e</b> exposes <code>CrudeTree</code> Blazor component. Which takes two arguments:
+
+        <ol>
+            <li>
+                <code>ViewModel</code> - An object that defines what to render.
+            </li>
+            <li>
+                <code>CrudeOptions</code> - (Optional) An object that defines options how to render or format values. If not specified it uses current thread culture formatter.
+            </li>
+        </ol>
+    </p>
+
+    <h2 class="main-text">Rendering fields</h2>
+
+    <p>
+        The framework parses the <code>ViewModel</code> that is passed in and renders all primitive class properties as fields.
+    </p>
+
+    <p>
+        The control of some rendering behaviour can be achieved by decorating the <code>ViewModel</code> properties and methods with attributes (see <b>Attributes</b> section).
+    </p>
+
+    <h2 class="main-text">Field validation</h2>
+
+    <p>
+        <b>CRUD.e</b> uses the default <code>System.ComponentModel.DataAnnotations</code> validation model so all default property attributes work with this framework.
+    </p>
+
+    <h2 class="main-text">Listing items</h2>
+
+    <p>
+        To create a list of items one or more properties types in the <code>ViewModel</code> need to implement <code>CrudeTable&lt;T&gt;</code> where <code>T</code> is a <code>ViewModel</code>
+        that represents a single listing. To see more details about how this is used please refer to <NavLink href="example-tables">listing items</NavLink> example.
+    </p>
+
+    <h2 class="main-text">Attributes</h2>
+
+    <p>
+        Valid property attributes:
+
+        <ol>
+            <li>
+                <code>[CrudeDisable]</code> - Disables a form field so it can not be changed.
+            </li>
+            <li>
+                <code>[CrudeIgnore]</code> - Ignores a property so it is not rendered.
+            </li>
+            <li>
+                <code>[CrudeOrder(order)]</code> - Specifies the rendering order. Properties with lower value are rendered first.
+            </li>
+            <li>
+                <code>[CrudePassword]</code> - Indicates that the string property should be rendered as a password field.
+            </li>
+        </ol>
+    </p>
+    
+    <p>
+        Valid method attributes:
+
+        <ol>
+            <li>
+                <code>[CrudeOnSubmit(name)]</code> - Specify which method to call on valid form submit. This method must have an <code>EditContext</code> parameter that will get passed in.
+            </li>
+            <li>
+                <code>[CrudeOnButtonClick(name)]</code> - Additional form buttons to render that can skip validation. This method must have an <code>EditContext</code> parameter that will get passed in.
+            </li>
+            <li>
+                <code>[CrudeOnClick(propertyName)]</code> - Method that gets called when property <code>propertyName</code> is clicked in the list.
+            </li>
+        </ol>
+    </p>
+
+    <h2 class="main-text">Primitive types supported</h2>
+    
+    <p>
+        Here is a list of the default primitive types and their <code>nullable</code> wrappers that can be rendered:
+        
+        <ol>
+            <li>
+                <code>Numeric</code> - All primitive numeric types.
+            </li>
+            <li>
+                <code>Boolean</code>
+            </li>
+            <li>
+                <code>String</code>
+            </li>
+            <li>
+                <code>Enum</code>
+            </li>
+            <li>
+                <code>DateTime/DateTimeOffset</code>
+            </li>
+        </ol>
+    </p>
+</div>

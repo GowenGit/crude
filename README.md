@@ -2,7 +2,7 @@
 
 ![Deploy to NuGet](https://github.com/GowenGit/crude/workflows/Deploy/badge.svg?branch=master)
 ![Deploy to GitHub Pages](https://github.com/GowenGit/crude/workflows/Deploy%20to%20GitHub%20Pages/badge.svg)
-<!-- [![NuGet](https://img.shields.io/nuget/v/Crude.svg)](https://www.nuget.org/packages/Crude) -->
+[![NuGet](https://img.shields.io/nuget/v/Crude.svg)](https://www.nuget.org/packages/Crude)
 
 # A lightweight **Blazor** component to auto generate **CRUD** forms and list views.
 
