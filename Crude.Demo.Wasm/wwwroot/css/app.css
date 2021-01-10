@@ -64,6 +64,10 @@ code {
     background-color: #f8f8f8;
 }
 
+.pure-menu {
+    border-bottom: 1px solid #f8f8f8;
+}
+
 #brand {
     padding: 0;
 }

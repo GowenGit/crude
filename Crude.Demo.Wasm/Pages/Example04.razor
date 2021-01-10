@@ -1,0 +1,167 @@
+﻿@page "/example-user-profile"
+
+@inject IJSRuntime JsRuntime
+@inject UserProfileViewModel UserProfileViewModel
+
+<h1 class="main-text">User Profile Form</h1>
+
+<div>
+    <CrudeTree ViewModel="UserProfileViewModel" />
+</div>
+
+<div class="content">
+    <h2 class="main-text">Show me the code</h2>
+
+    <p>
+        Let's define our root view model first. Here we use a <code>DummyDataService</code> to represent a
+        simple in memory repository we will load elements from.
+    </p>
+    
+    <CodeBlock Value="@CsharpRoot" />
+
+    <p>
+        Now let's define a <code>ProductListingViewModel</code> that defines how individual elements
+        are displayed.
+    </p>
+
+    <CodeBlock Value="@CsharpViewModel" />
+
+    <p>
+        The most important part is to implement <code>ProductTable</code>. It is a class that defines how data 
+        is loaded into our table. It allows us to load elements page by page instead of loading all of our results
+        at once. Note that the following is a very crude implementation that is extremely inefficient. It uses reflection
+        to sort items and does multiple in memory reads of our whole data set. For production use we will want to offload
+        most heavy lifting of <code>GetTotalElementCount()</code> and <code>GetElements()</code> to the database.
+    </p>
+    
+    <CodeBlock Value="@CsharpTableLoader" />
+
+    <p>
+        And finally we add a blazor component.
+    </p>
+
+    <CodeBlock Value="@Html" />
+</div>
+
+
+@code {
+    private const string Html = @"
+@inject ListingViewModel ListingViewModel
+
+<div>
+    <CrudeTree ViewModel=""ListingViewModel"" />
+</div>";
+
+    private const string CsharpRoot = @"
+public class ListingViewModel
+{
+    public ProductTable ProductList { get; }
+
+    public ListingViewModel(DummyDataService dummyDataService)
+    {
+        ProductList = new ProductTable(dummyDataService);
+    }
+}";
+
+    private const string CsharpViewModel = @"
+public class ProductListingViewModel
+{
+    public int Id { get; }
+
+    [Display(Name = ""Name"")]
+    public string DisplayName { get; }
+
+    public int Quantity { get; }
+
+    [Display(Name = ""Price (USD)"")]
+    public decimal Price { get; }
+
+    /// <summary>
+    /// List item view models need
+    /// a default constructor.
+    /// </summary>
+    public ProductListingViewModel() { }
+
+    public ProductListingViewModel(Product product)
+    {
+        Id = product.Id;
+        DisplayName = product.DisplayName;
+        Quantity = product.Quantity;
+        Price = product.Price;
+    }
+
+    [CrudeOnClick(nameof(Id))]
+    private void OnClick()
+    {
+        Console.WriteLine($""Id {Id} was pressed"");
+    }
+}";
+
+    private const string CsharpTableLoader = @"
+public class ProductTable : CrudeTable<ProductListingViewModel>
+{
+    private readonly DummyDataService _dummyDataService;
+
+    public ProductTable(DummyDataService dummyDataService)
+        : base(isSearchable: true, isSortable: true, tablePageSize: 5)
+    {
+        _dummyDataService = dummyDataService;
+    }
+
+    public override ulong GetTotalElementCount()
+    {
+        return (ulong)GetElementsInternal(0, int.MaxValue).Count();
+    }
+
+    public override IEnumerable<ProductListingViewModel> GetElements()
+    {
+        return GetElementsInternal((int)Page, (int)TablePageSize);
+    }
+
+    private IEnumerable<ProductListingViewModel> GetElementsInternal(int pageIndex, int size)
+    {
+        var products = _dummyDataService.GetProducts();
+
+        // Search part
+        if (!string.IsNullOrWhiteSpace(UnescapedSearchTerm))
+        {
+            products = products.Where(product => product.DisplayName
+                        .Contains(UnescapedSearchTerm, StringComparison.CurrentCultureIgnoreCase));
+        }
+
+        // Sort part
+        // Note: this method is extremely inefficient.
+        // It uses reflection to fetch item values based on
+        // name. For production use it is advisable to offload
+        // sorting to the database.
+        if (!string.IsNullOrWhiteSpace(SortColumn))
+        {
+            var propertyInfo = typeof(Product).GetProperty(SortColumn);
+
+            if (SortDescending)
+            {
+                products = products
+                    .OrderByDescending(
+                        product => propertyInfo!.GetValue(product));
+            }
+            else
+            {
+                products = products
+                    .OrderBy(
+                        product => propertyInfo!.GetValue(product));
+            }
+        }
+
+        // Pagination part
+        return products
+            .Skip(pageIndex * size)
+            .Take(size)
+            .Select(product => new ProductListingViewModel(product));
+    }
+}";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JsRuntime.InvokeVoidAsync("Highlight");
+    }
+}

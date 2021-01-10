@@ -20,6 +20,7 @@ namespace Crude.Demo.Wasm
             builder.Services.AddSingleton<DummyDataService>();
 
             builder.Services.AddScoped<ListingViewModel>();
+            builder.Services.AddScoped<UserProfileViewModel>();
 
             await builder.Build().RunAsync();
         }

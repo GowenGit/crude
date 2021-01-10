@@ -20,4 +20,4 @@ The library is designed to use no JavaScript and very little CSS (mainly vanilla
 
 ## Documentation
 
-To read documentation and see examples visit the [homepage](https://gowengit.github.io/crude/).
+To see documentation and example code visit the [homepage](https://gowengit.github.io/crude/).
