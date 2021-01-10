@@ -1,0 +1,59 @@
+﻿@page "/example-style"
+
+@inject IJSRuntime JsRuntime
+
+<h1 class="main-text">Example Styling</h1>
+
+<div class="content">
+    <p>
+        By default <b>CRUD.e</b> has only bare minimum CSS needed. Throughout all the examples we
+        have added the following styling elements to make everything more clear.
+    </p>
+    
+    <CodeBlock Value="@Css" />
+</div>
+
+
+@code {
+    private const string Css = @"
+.validation-message {
+    color: red;
+    font-size: 0.6em;
+}
+
+ul.validation-errors {
+    list-style-type: square;
+    padding-left: 13px;
+}
+
+crude-field-fragment input:not([type=checkbox]) {
+    width: 100%
+}
+
+crude-field-fragment label {
+    font-size: 0.8em;
+    font-weight: 600;
+}
+
+table {
+    font-size: 0.8em;
+}
+
+a {
+    color: #56cbf9;
+    cursor: pointer;
+}
+
+td a {
+    font-weight: 600;
+}
+
+a:hover {
+    text-decoration: underline;
+}";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JsRuntime.InvokeVoidAsync("Highlight");
+    }
+}

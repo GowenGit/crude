@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Crude.Demo.Wasm.ViewModel
 {
-    public class SimpleViewModel
+    public class TestViewModel
     {
         [CrudeOrder(2)]
         public int IntegerFieldOne { get; set; } = 1;
@@ -24,7 +24,7 @@ namespace Crude.Demo.Wasm.ViewModel
         [Display(Name = "Floating")]
         public double DoubleFieldOne { get; set; } = 1.2;
 
-        public SimpleTable TableFieldOne { get; set; } = new SimpleTable();
+        public TestTable TableFieldOne { get; set; } = new TestTable();
 
         public double? DoubleFieldTwo { get; set; } = null;
 
@@ -34,9 +34,9 @@ namespace Crude.Demo.Wasm.ViewModel
 
         public bool BoolFieldOne { get; set; } = true;
 
-        public SimpleEnum Status { get; set; } = SimpleEnum.Active;
+        public TestEnum Status { get; set; } = TestEnum.Active;
 
-        public SimpleEnum? NullableStatus { get; set; } = null;
+        public TestEnum? NullableStatus { get; set; } = null;
 
         public DateTime Created { get; set; } = DateTime.Now;
 
@@ -69,30 +69,30 @@ namespace Crude.Demo.Wasm.ViewModel
         }
     }
 
-    public class SimpleTable : CrudeTable<SimpleTableViewModel>
+    public class TestTable : CrudeTable<TestTableViewModel>
     {
-        private static readonly IEnumerable<SimpleTableViewModel> Rows = new[]
+        private static readonly IEnumerable<TestTableViewModel> Rows = new[]
         {
-            new SimpleTableViewModel(),
-            new SimpleTableViewModel(),
-            new SimpleTableViewModel()
+            new TestTableViewModel(),
+            new TestTableViewModel(),
+            new TestTableViewModel()
         };
 
-        public SimpleTable() : base(true, true) { }
+        public TestTable() : base(true, true) { }
 
         public override ulong GetTotalElementCount()
         {
             return 27;
         }
 
-        public override IEnumerable<SimpleTableViewModel> GetElements()
+        public override IEnumerable<TestTableViewModel> GetElements()
         {
             Console.WriteLine(UnescapedSearchTerm);
             return Rows;
         }
     }
 
-    public class SimpleTableViewModel
+    public class TestTableViewModel
     {
         public int TableIntegerFieldOne { get; set; } = 1;
 
@@ -115,7 +115,7 @@ namespace Crude.Demo.Wasm.ViewModel
         }
     }
 
-    public enum SimpleEnum
+    public enum TestEnum
     {
         Active = 0,
         Passive = 1

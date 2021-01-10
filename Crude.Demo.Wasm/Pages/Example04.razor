@@ -6,35 +6,17 @@
 <h1 class="main-text">User Profile Form</h1>
 
 <div>
-    <CrudeTree ViewModel="UserProfileViewModel" />
+    <CrudeTree ViewModel="UserProfileViewModel" Options="new CrudeOptions(CultureInfo.CurrentCulture)" />
 </div>
 
 <div class="content">
     <h2 class="main-text">Show me the code</h2>
 
     <p>
-        Let's define our root view model first. Here we use a <code>DummyDataService</code> to represent a
-        simple in memory repository we will load elements from.
+        Let's define all needed view models and <code>OwnedItemTable</code>.
     </p>
     
-    <CodeBlock Value="@CsharpRoot" />
-
-    <p>
-        Now let's define a <code>ProductListingViewModel</code> that defines how individual elements
-        are displayed.
-    </p>
-
-    <CodeBlock Value="@CsharpViewModel" />
-
-    <p>
-        The most important part is to implement <code>ProductTable</code>. It is a class that defines how data 
-        is loaded into our table. It allows us to load elements page by page instead of loading all of our results
-        at once. Note that the following is a very crude implementation that is extremely inefficient. It uses reflection
-        to sort items and does multiple in memory reads of our whole data set. For production use we will want to offload
-        most heavy lifting of <code>GetTotalElementCount()</code> and <code>GetElements()</code> to the database.
-    </p>
-    
-    <CodeBlock Value="@CsharpTableLoader" />
+    <CodeBlock Value="@Csharp" />
 
     <p>
         And finally we add a blazor component.
@@ -46,64 +28,69 @@
 
 @code {
     private const string Html = @"
-@inject ListingViewModel ListingViewModel
+@inject UserProfileViewModel UserProfileViewModel
 
 <div>
-    <CrudeTree ViewModel=""ListingViewModel"" />
+    <CrudeTree ViewModel=""UserProfileViewModel"" Options=""new CrudeOptions(CultureInfo.CurrentCulture)"" />
 </div>";
 
-    private const string CsharpRoot = @"
-public class ListingViewModel
+    private const string Csharp = @"
+public class UserProfileViewModel
 {
-    public ProductTable ProductList { get; }
+    [Required]
+    [Display(Name = ""Handle"")]
+    [MinLength(2)]
+    public string Nickname { get; set; } = ""Jeff"";
 
-    public ListingViewModel(DummyDataService dummyDataService)
+    [CrudeDisable]
+    [CrudeOrder(1)]
+    [EmailAddress]
+    public string Email { get; set; } = ""jeff @email.com"";
+
+    [Required]
+    public DateTime Birthday { get; set; } = DateTime.Now.AddYears(-30);
+
+    [Required]
+    public Gender Gender { get; set; } = Gender.Male;
+
+    public string Description { get; set; }
+
+    [CrudeIgnore]
+    public string Name { get; set; }
+
+    [CrudeDisable]
+    [Display(Name = ""Balance (USD)"")]
+    public int? Balance { get; set; }
+
+    public OwnedItemTable Items { get; }
+
+    public UserProfileViewModel(DummyDataService dummyDataService)
     {
-        ProductList = new ProductTable(dummyDataService);
-    }
-}";
-
-    private const string CsharpViewModel = @"
-public class ProductListingViewModel
-{
-    public int Id { get; }
-
-    [Display(Name = ""Name"")]
-    public string DisplayName { get; }
-
-    public int Quantity { get; }
-
-    [Display(Name = ""Price (USD)"")]
-    public decimal Price { get; }
-
-    /// <summary>
-    /// List item view models need
-    /// a default constructor.
-    /// </summary>
-    public ProductListingViewModel() { }
-
-    public ProductListingViewModel(Product product)
-    {
-        Id = product.Id;
-        DisplayName = product.DisplayName;
-        Quantity = product.Quantity;
-        Price = product.Price;
+        Items = new OwnedItemTable(dummyDataService);
     }
 
-    [CrudeOnClick(nameof(Id))]
-    private void OnClick()
+    [CrudeOnSubmit(""Save"")]
+    private void OnSave(EditContext context)
     {
-        Console.WriteLine($""Id {Id} was pressed"");
+        Console.WriteLine(""Save button clicked"");
     }
-}";
 
-    private const string CsharpTableLoader = @"
-public class ProductTable : CrudeTable<ProductListingViewModel>
+    [CrudeOnButtonClick(""Close Account"")]
+    private void OnClose(EditContext context)
+    {
+        Console.WriteLine(""Close Account button clicked"");
+    }
+}
+
+/// <summary>
+/// Very inefficient implementation.
+/// </summary>
+public class OwnedItemTable : CrudeTable<UserItemViewModel>
 {
     private readonly DummyDataService _dummyDataService;
 
-    public ProductTable(DummyDataService dummyDataService)
-        : base(isSearchable: true, isSortable: true, tablePageSize: 5)
+    public OwnedItemTable(DummyDataService dummyDataService)
+        : base(isSearchable: false, isSortable: true, tablePageSize: 10)
     {
         _dummyDataService = dummyDataService;
     }
@@ -113,12 +100,12 @@ public class ProductTable : CrudeTable<ProductListingViewModel>
         return (ulong)GetElementsInternal(0, int.MaxValue).Count();
     }
 
-    public override IEnumerable<ProductListingViewModel> GetElements()
+    public override IEnumerable<UserItemViewModel> GetElements()
     {
         return GetElementsInternal((int)Page, (int)TablePageSize);
     }
 
-    private IEnumerable<ProductListingViewModel> GetElementsInternal(int pageIndex, int size)
+    private IEnumerable<UserItemViewModel> GetElementsInternal(int pageIndex, int size)
     {
         var products = _dummyDataService.GetProducts();
 
@@ -126,14 +113,10 @@ public class ProductTable : CrudeTable<ProductListingViewModel>
         if (!string.IsNullOrWhiteSpace(UnescapedSearchTerm))
         {
             products = products.Where(product => product.DisplayName
-                        .Contains(UnescapedSearchTerm, StringComparison.CurrentCultureIgnoreCase));
+                .Contains(UnescapedSearchTerm, StringComparison.CurrentCultureIgnoreCase));
         }
 
         // Sort part
-        // Note: this method is extremely inefficient.
-        // It uses reflection to fetch item values based on
-        // name. For production use it is advisable to offload
-        // sorting to the database.
         if (!string.IsNullOrWhiteSpace(SortColumn))
         {
             var propertyInfo = typeof(Product).GetProperty(SortColumn);
@@ -156,7 +139,33 @@ public class ProductTable : CrudeTable<ProductListingViewModel>
         return products
             .Skip(pageIndex * size)
             .Take(size)
-            .Select(product => new ProductListingViewModel(product));
+            .Select(product => new UserItemViewModel(product));
+    }
+}
+
+public class UserItemViewModel
+{
+    public int Id { get; }
+
+    [Display(Name = ""Name"")]
+    public string DisplayName { get; }
+
+    /// <summary>
+    /// List item view models need
+    /// a default constructor.
+    /// </summary>
+    public UserItemViewModel() { }
+
+    public UserItemViewModel(Product product)
+    {
+        Id = product.Id;
+        DisplayName = product.DisplayName;
+    }
+
+    [CrudeOnClick(nameof(Id))]
+    private void OnClick()
+    {
+        Console.WriteLine($""Id {Id} was pressed"");
     }
 }";
 
