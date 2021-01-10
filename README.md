@@ -1,6 +1,6 @@
 ![CRUDe](Crude.Demo.Wasm/wwwroot/assets/logo_large.svg)
 
-![Deploy to NuGet](https://github.com/GowenGit/crude/workflows/Deploy/badge.svg?branch=master)
+![Deploy](https://github.com/GowenGit/crude/workflows/Deploy/badge.svg)
 ![Deploy to GitHub Pages](https://github.com/GowenGit/crude/workflows/Deploy%20to%20GitHub%20Pages/badge.svg)
 [![NuGet](https://img.shields.io/nuget/v/Crude.svg)](https://www.nuget.org/packages/Crude)
 
