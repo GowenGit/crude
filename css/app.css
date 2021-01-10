@@ -60,6 +60,11 @@ p {
     margin: 10px;
 }
 
+ol {
+    list-style-type: square;
+    padding-left: 15px;
+}
+
 code {
     background-color: #f8f8f8;
 }
