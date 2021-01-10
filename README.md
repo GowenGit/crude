@@ -17,3 +17,7 @@ The library is designed to use no JavaScript and very little CSS (mainly vanilla
 * [x] String
 * [x] Enum
 * [x] DateTime, DateTimeOffset
+
+## Documentation
+
+To read documentation and see examples visit the [homepage](https://gowengit.github.io/crude/).
