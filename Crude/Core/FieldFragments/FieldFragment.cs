@@ -54,6 +54,7 @@ namespace Crude.Core.FieldFragments
             builder.AddAttribute(seq++, "Value", Property.GetValue());
             builder.AddAttribute(seq++, "ValueChanged", valueChanged);
             builder.AddAttribute(seq++, "ValueExpression", expression);
+            builder.AddAttribute(seq++, "name", Property.Name);
             builder.AddAttribute(seq++, "id", Identifier);
             builder.AddAttribute(seq++, "disabled", Property.Disabled);
 
