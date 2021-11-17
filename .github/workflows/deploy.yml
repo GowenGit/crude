@@ -9,7 +9,7 @@ jobs:
   build-nuget:
     name: Deployment
 
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
 
     steps:
     - name: Set version tag
