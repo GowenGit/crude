@@ -21,10 +21,6 @@ namespace Crude.Core
 
         public Action StateHasChanged { get; }
 
-        public string Action { get; }
-
-        public string Method { get; }
-
         public RenderContext(
             ComponentBase receiver,
             Action stateHasChanged,
@@ -36,8 +32,6 @@ namespace Crude.Core
             ViewModel = viewModel;
 
             Formatter = userOptions.Formatter;
-            Action = userOptions.Action;
-            Method = userOptions.Method;
 
             EditContext = new EditContext(viewModel);
         }

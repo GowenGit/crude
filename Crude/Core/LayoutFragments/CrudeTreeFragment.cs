@@ -19,12 +19,6 @@ namespace Crude.Core.LayoutFragments
             builder.OpenComponent<EditForm>(seq++);
             builder.AddAttribute(seq++, "EditContext", context.EditContext);
 
-            if (!string.IsNullOrWhiteSpace(context.Action) && !string.IsNullOrWhiteSpace(context.Method))
-            {
-                builder.AddAttribute(seq++, "action", context.Action);
-                builder.AddAttribute(seq++, "method", context.Method);
-            }
-
             var onSubmit = GetOnSubmitButton(context);
 
             if (onSubmit != null)
@@ -79,9 +73,9 @@ namespace Crude.Core.LayoutFragments
 
             if (onSubmit != null)
             {
-                builder.OpenElement(seq++, "button");
+                builder.OpenElement(seq++, "input");
                 builder.AddAttribute(seq++, "type", "submit");
-                builder.AddContent(seq++, onSubmit.Name);
+                builder.AddAttribute(seq++, "value", onSubmit.Name);
                 builder.CloseElement();
             }
 
