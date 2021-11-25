@@ -15,6 +15,16 @@ namespace Crude.Core.FieldFragments
 
         public string Identifier { get; }
 
+        protected bool ValueIsSet { get; set; }
+
+        protected object? Value { get; set; }
+
+        protected object? ValueExpression { get; set; }
+
+        protected object? ValueChanged { get; set; }
+
+        protected Type? ValidationObjectType { get; set; }
+
         protected FieldFragment(CrudeProperty property)
         {
             Property = property;
@@ -46,12 +56,13 @@ namespace Crude.Core.FieldFragments
         {
             var constant = Expression.Constant(Property.ViewModel);
             var property = Expression.Property(constant, Property.Info);
-            var expression = Expression.Lambda<Func<T>>(property);
 
-            var valueChanged = EventCallback.Factory.Create<T>(this, value => Property.SetValue(value));
+            var expression = ValueExpression ?? Expression.Lambda<Func<T>>(property);
+
+            var valueChanged = ValueChanged ?? EventCallback.Factory.Create<T>(this, value => Property.SetValue(value));
 
             builder.AddAttribute(seq++, "Placeholder", Property.Name);
-            builder.AddAttribute(seq++, "Value", Property.GetValue());
+            builder.AddAttribute(seq++, "Value", ValueIsSet ? Value : Property.GetValue());
             builder.AddAttribute(seq++, "ValueChanged", valueChanged);
             builder.AddAttribute(seq++, "ValueExpression", expression);
             builder.AddAttribute(seq++, "name", Property.Name);
@@ -66,7 +77,7 @@ namespace Crude.Core.FieldFragments
             // Close input
             builder.CloseComponent();
 
-            var type = typeof(ValidationMessage<>).MakeGenericType(Property.Info.PropertyType);
+            var type = typeof(ValidationMessage<>).MakeGenericType(ValidationObjectType ?? Property.Info.PropertyType);
 
             builder.OpenComponent(seq++, type);
             builder.AddAttribute(seq++, "For", expression);

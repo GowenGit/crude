@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Crude.Core.FieldFragments;
 using Crude.Core.Fragments;
+using Crude.Core.Models;
 using Crude.Core.Parsers;
 using Microsoft.AspNetCore.Components;
 
@@ -93,6 +94,11 @@ namespace Crude.Core.LayoutFragments
             if (unwrappedType.IsEnum)
             {
                 fragment = new EnumFragment(property);
+            }
+
+            if (unwrappedType.IsSubclassOf(typeof(CrudeDropdown)))
+            {
+                fragment = new CrudeDropdownFragment(property);
             }
 
             return fragment ??= new NotRenderedFragment(property);

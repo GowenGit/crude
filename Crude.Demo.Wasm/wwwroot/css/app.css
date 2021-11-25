@@ -122,3 +122,8 @@ a:hover {
     --grid-setup: auto / auto;
     --grid-full-span: 1 / span 1
 }
+
+.example-custom-dropdown {
+    --grid-setup: auto / auto;
+    --grid-full-span: 1 / span 1
+}

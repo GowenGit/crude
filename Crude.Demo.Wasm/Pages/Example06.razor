@@ -1,0 +1,82 @@
+﻿@page "/example-custom-dropdown"
+
+@inject IJSRuntime JsRuntime
+
+<h1 class="main-text">Custom Dropdown Form</h1>
+
+<div class="example-custom-dropdown">
+    <CrudeTree ViewModel="new CustomDropdownViewModel()" />
+</div>
+
+<div class="content">
+    <h2 class="main-text">Show me the code</h2>
+
+    <p>
+        We change the CSS so we have two column layout first.
+    </p>
+
+    <CodeBlock Value="@Css" />
+    
+    <p>
+        Now we define our view model.
+    </p>
+    
+    <CodeBlock Value="@Csharp" />
+    
+    <p>
+        And finally we add a blazor component.
+    </p>
+
+    <CodeBlock Value="@Html" />
+</div>
+
+
+@code {
+    private const string Html = @"
+<div class=""example-custom-dropdown"">
+    <CrudeTree ViewModel=""new CustomDropdownViewModel()"" />
+</div>";
+
+    private const string Css = @"
+.example-custom-dropdown {
+    --grid-setup: auto / auto;
+    --grid-full-span: 1 / span 1
+}";
+
+private const string Csharp = @"
+public class CustomDropdownViewModel
+{
+    [Required]
+    [Display(Name = ""Choose Your Pet"")]
+    public CustomDropdown Pet { get; set; } = new();
+
+    [CrudeOnSubmit(""Save"")]
+    private void OnSave(EditContext context)
+    {
+        Console.WriteLine($""User selected {Pet.Value}"");
+    }
+}
+
+public class CustomDropdown : CrudeDropdown
+{
+    public CustomDropdown()
+    {
+        Value = ""dog"";
+    }
+
+    public override IEnumerable<KeyValuePair<string, string>> GetDropdownPairs()
+    {
+        return new List<KeyValuePair<string, string>>
+        {
+            new(string.Empty, string.Empty),
+            new(""snake"", ""Snake Jim""),
+            new(""dog"", ""Dog Jeff"")
+        };
+    }
+}";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JsRuntime.InvokeVoidAsync("Highlight");
+    }
+}

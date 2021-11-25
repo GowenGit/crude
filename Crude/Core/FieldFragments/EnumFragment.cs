@@ -1,7 +1,10 @@
-﻿using System;
-using Crude.Core.Parsers;
+﻿using Crude.Core.Parsers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Reflection;
 
 namespace Crude.Core.FieldFragments
 {
@@ -31,9 +34,32 @@ namespace Crude.Core.FieldFragments
             foreach (var value in Enum.GetValues(enumType.UnwrapNullable()))
             {
                 builder.OpenElement(seq++, "option");
-                builder.AddContent(seq++, value.ToString());
+                builder.AddAttribute(seq++, "value", value.ToString());
+                builder.AddContent(seq++, GetDisplayName(value));
                 builder.CloseElement();
             }
         };
+
+        private static string GetDisplayName(object? value)
+        {
+            if (value == null)
+            {
+                return string.Empty;
+            }
+
+            var member = value
+                .GetType()
+                .GetMember(value.ToString() ?? string.Empty)
+                .FirstOrDefault();
+
+            var displayAttribute = member?.GetCustomAttribute<DisplayAttribute>();
+
+            if (displayAttribute != null)
+            {
+                return displayAttribute.GetName() ?? value.ToString() ?? string.Empty;
+            }
+
+            return value.ToString() ?? string.Empty;
+        }
     }
 }
