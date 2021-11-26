@@ -50,6 +50,12 @@ namespace Crude.Core.Parsers
 
                 var password = attributes.FirstOrDefault(x => x is CrudePasswordAttribute) is CrudePasswordAttribute _;
 
+                var htmlLabelAttribute = attributes.FirstOrDefault(x => x is CrudeHtmlLabelAttribute) as CrudeHtmlLabelAttribute;
+
+                var htmlLabel = htmlLabelAttribute?.Html ?? string.Empty;
+
+                var emptyPlaceholder = attributes.FirstOrDefault(x => x is CrudeEmptyPlaceholderAttribute) is CrudeEmptyPlaceholderAttribute _;
+
                 CrudeEvent? onClick = null;
 
                 foreach (var method in methods)
@@ -63,7 +69,16 @@ namespace Crude.Core.Parsers
                     }
                 }
 
-                items.Add(new CrudeProperty(name, order, onClick, property, viewModel, disabled, password));
+                items.Add(new CrudeProperty(
+                    name,
+                    order,
+                    onClick,
+                    property,
+                    viewModel,
+                    disabled,
+                    password,
+                    emptyPlaceholder,
+                    htmlLabel));
             }
 
             return items.OrderBy(x => x.Order);
@@ -134,6 +149,10 @@ namespace Crude.Core.Parsers
 
         public bool Password { get; }
 
+        public bool EmptyPlaceholder { get; }
+
+        public string HtmlLabel { get; }
+
         public CrudeProperty(
             string name,
             int order,
@@ -141,7 +160,9 @@ namespace Crude.Core.Parsers
             PropertyInfo info,
             object viewModel,
             bool disabled,
-            bool password)
+            bool password,
+            bool emptyPlaceholder,
+            string htmlLabel)
         {
             Name = name;
             Order = order;
@@ -150,6 +171,8 @@ namespace Crude.Core.Parsers
             ViewModel = viewModel;
             Disabled = disabled;
             Password = password;
+            EmptyPlaceholder = emptyPlaceholder;
+            HtmlLabel = htmlLabel;
 
             if (Info.PropertyType.IsGenericBaseType(typeof(CrudeTable<>)))
             {

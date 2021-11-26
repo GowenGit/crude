@@ -63,7 +63,11 @@ namespace Crude.Core.FieldFragments
 
             var valueChanged = ValueChanged ?? EventCallback.Factory.Create<T>(this, value => Property.SetValue(value));
 
-            builder.AddAttribute(seq++, "Placeholder", Property.Name);
+            if (!Property.EmptyPlaceholder)
+            {
+                builder.AddAttribute(seq++, "Placeholder", Property.Name);
+            }
+
             builder.AddAttribute(seq++, "Value", ValueIsSet ? Value : Property.GetValue());
             builder.AddAttribute(seq++, "ValueChanged", valueChanged);
             builder.AddAttribute(seq++, "ValueExpression", expression);

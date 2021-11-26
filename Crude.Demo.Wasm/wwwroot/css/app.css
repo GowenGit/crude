@@ -118,7 +118,7 @@ a:hover {
     --grid-full-span: 1 / span 2
 }
 
-.example-simple-login-form {
+.example-simple-login-form, .example-advanced-login-form {
     --grid-setup: auto / auto;
     --grid-full-span: 1 / span 1
 }

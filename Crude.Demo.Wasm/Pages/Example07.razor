@@ -1,11 +1,11 @@
-﻿@page "/example-simple-login-form"
+﻿@page "/example-advanced-login-form"
 
 @inject IJSRuntime JsRuntime
 
-<h1 class="main-text">Simple Login Form</h1>
+<h1 class="main-text">Advanced Login Form</h1>
 
-<div class="example-simple-login-form">
-    <CrudeTree ViewModel="new LoginViewModel()" />
+<div class="example-advanced-login-form">
+    <CrudeTree ViewModel="new AdvancedLoginViewModel()" />
 </div>
 
 <div class="content">
@@ -32,25 +32,28 @@
 
 
 @code {
-    private const string Html = @"
-<div class=""example-simple-login-form"" >
+        private const string Html = @"
+<div class=""example-advanced-login-form"" >
     <CrudeTree ViewModel=""new LoginViewModel()"" />
 </div>";
 
-    private const string Css = @"
-.example-simple-login-form {
+        private const string Css = @"
+.example-advanced-login-form {
     --grid-setup: auto / auto;
     --grid-full-span: 1 / span 1
 }";
 
-    private const string Csharp = @"
-public class LoginViewModel
+        private const string Csharp = @"
+public class AdvancedLoginViewModel
 {
     [Required]
+    [CrudeEmptyPlaceholder]
     [EmailAddress]
     public string Email { get; set; }
 
     [CrudePassword]
+    [CrudeEmptyPlaceholder]
+    [CrudeHtmlLabel(""<a href=\""#\"">Forgot your password?</a>"")]
     [Required]
     [Display(Name = ""Password"")]
     public string Password { get; set; }

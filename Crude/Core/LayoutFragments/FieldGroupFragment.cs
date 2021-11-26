@@ -55,7 +55,16 @@ namespace Crude.Core.LayoutFragments
 
             builder.OpenElement(seq++, "label");
             builder.AddAttribute(seq++, "for", fragment.Identifier);
-            builder.AddContent(seq++, _property.Name.ToString(context.Formatter));
+
+            if (string.IsNullOrWhiteSpace(_property.HtmlLabel))
+            {
+                builder.AddContent(seq++, _property.Name.ToString(context.Formatter));
+            }
+            else
+            {
+                builder.AddMarkupContent(seq++, _property.HtmlLabel);
+            }
+
             builder.CloseElement();
 
             builder.AddContent(seq++, fragment.Render(context));
