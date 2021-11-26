@@ -25,6 +25,8 @@ namespace Crude.Core.FieldFragments
 
         protected Type? ValidationObjectType { get; set; }
 
+        public abstract string FragmentType { get; }
+
         protected FieldFragment(CrudeProperty property)
         {
             Property = property;

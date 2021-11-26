@@ -8,6 +8,8 @@ namespace Crude.Core.FieldFragments
     {
         internal BooleanFragment(CrudeProperty property) : base(property) { }
 
+        public override string FragmentType => "checkbox";
+
         public override RenderFragment Render(RenderContext context) => builder =>
         {
             var seq = 0;

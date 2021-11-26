@@ -6,6 +6,8 @@ namespace Crude.Core.FieldFragments
 {
     internal class NumberFragment<T> : FieldFragment
     {
+        public override string FragmentType => "number";
+
         internal NumberFragment(CrudeProperty property) : base(property) { }
 
         public override RenderFragment Render(RenderContext context) => builder =>

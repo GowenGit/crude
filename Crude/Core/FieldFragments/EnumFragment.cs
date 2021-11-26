@@ -10,6 +10,8 @@ namespace Crude.Core.FieldFragments
 {
     internal class EnumFragment : FieldFragment
     {
+        public override string FragmentType => "select";
+
         internal EnumFragment(CrudeProperty property) : base(property) { }
 
         public override RenderFragment Render(RenderContext context) => builder =>

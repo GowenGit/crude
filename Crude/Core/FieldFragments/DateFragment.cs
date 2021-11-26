@@ -6,6 +6,8 @@ namespace Crude.Core.FieldFragments
 {
     internal class DateFragment<T> : FieldFragment
     {
+        public override string FragmentType => "date";
+
         internal DateFragment(CrudeProperty property) : base(property) { }
 
         public override RenderFragment Render(RenderContext context) => builder =>

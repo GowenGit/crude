@@ -9,6 +9,8 @@ namespace Crude.Core.FieldFragments
 {
     internal class CrudeDropdownFragment : FieldFragment
     {
+        public override string FragmentType => "select";
+
         internal CrudeDropdownFragment(CrudeProperty property) : base(property) { }
 
         public override RenderFragment Render(RenderContext context) => builder =>

@@ -48,6 +48,11 @@ namespace Crude.Core.LayoutFragments
 
             builder.OpenElement(seq++, "crude-field-fragment");
 
+            if (!string.IsNullOrWhiteSpace(fragment.FragmentType))
+            {
+                builder.AddAttribute(seq++, "class", $"cft-{fragment.FragmentType}");
+            }
+
             builder.OpenElement(seq++, "label");
             builder.AddAttribute(seq++, "for", fragment.Identifier);
             builder.AddContent(seq++, _property.Name.ToString(context.Formatter));
