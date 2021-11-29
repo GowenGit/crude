@@ -48,11 +48,13 @@ public class RegistrationViewModel
 {
     [Required]
     [Display(Name = ""Display Name"")]
+    [CrudePlaceholder]
     [StringLength(20, MinimumLength = 2)]
     public string Name { get; set; }
 
     [Required]
     [EmailAddress]
+    [CrudePlaceholder]
     public string Email { get; set; }
 
     [CrudePassword]

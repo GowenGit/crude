@@ -17,6 +17,7 @@ namespace Crude.Core.LayoutFragments
             var seq = 0;
 
             builder.OpenComponent<EditForm>(seq++);
+            builder.AddAttribute(seq++, "class", "crude-tree");
             builder.AddAttribute(seq++, "EditContext", context.EditContext);
 
             var onSubmit = GetOnSubmitButton(context);
@@ -36,7 +37,6 @@ namespace Crude.Core.LayoutFragments
 
             var seq = 0;
 
-            builder.OpenElement(seq++, "crude-tree");
             builder.OpenElement(seq++, "crude-tree-header");
 
             builder.OpenComponent<DataAnnotationsValidator>(seq++);
@@ -86,7 +86,6 @@ namespace Crude.Core.LayoutFragments
                 builder.AddContent(seq++, button.Render(context));
             }
 
-            builder.CloseElement();
             builder.CloseElement();
         };
 

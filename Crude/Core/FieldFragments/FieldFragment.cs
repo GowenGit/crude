@@ -63,7 +63,7 @@ namespace Crude.Core.FieldFragments
 
             var valueChanged = ValueChanged ?? EventCallback.Factory.Create<T>(this, value => Property.SetValue(value));
 
-            if (!Property.EmptyPlaceholder)
+            if (Property.Placeholder)
             {
                 builder.AddAttribute(seq++, "Placeholder", Property.Name);
             }

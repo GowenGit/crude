@@ -54,7 +54,7 @@ namespace Crude.Core.Parsers
 
                 var htmlLabel = htmlLabelAttribute?.Html ?? string.Empty;
 
-                var emptyPlaceholder = attributes.FirstOrDefault(x => x is CrudeEmptyPlaceholderAttribute) is CrudeEmptyPlaceholderAttribute _;
+                var placeholder = attributes.FirstOrDefault(x => x is CrudePlaceholderAttribute) is CrudePlaceholderAttribute _;
 
                 CrudeEvent? onClick = null;
 
@@ -69,19 +69,29 @@ namespace Crude.Core.Parsers
                     }
                 }
 
-                items.Add(new CrudeProperty(
-                    name,
-                    order,
-                    onClick,
-                    property,
-                    viewModel,
-                    disabled,
-                    password,
-                    emptyPlaceholder,
-                    htmlLabel));
+                items.Add(new CrudeProperty
+                {
+                    Name = name,
+                    Order = order,
+                    OnClick = onClick,
+                    Info = property,
+                    ViewModel = viewModel,
+                    Disabled = disabled,
+                    Password = password,
+                    Placeholder = placeholder,
+                    HtmlLabel = htmlLabel
+                });
             }
 
-            return items.OrderBy(x => x.Order);
+            var seqNo = 0;
+
+            foreach (var item in items.OrderBy(x => x.Order))
+            {
+                yield return item with
+                {
+                    SequenceNo = ++seqNo
+                };
+            }
         }
 
         public static List<CrudeMethod> ParseMethods(object viewModel)
@@ -107,7 +117,12 @@ namespace Crude.Core.Parsers
                         continue;
                     }
 
-                    items.Add(new CrudeMethod(memberInfo, methodInfo, attributes.Cast<CrudeMethodAttribute>().ToList()));
+                    items.Add(new CrudeMethod
+                    {
+                        MemberInfo = memberInfo,
+                        MethodInfo = methodInfo,
+                        Attributes = attributes.Cast<CrudeMethodAttribute>().ToList()
+                    });
                 }
             }
 
@@ -115,74 +130,40 @@ namespace Crude.Core.Parsers
         }
     }
 
-    internal class CrudeMethod
+    internal record CrudeMethod
     {
-        public MemberInfo MemberInfo { get; }
+        public MemberInfo MemberInfo { get; init; } = default!;
 
-        public MethodInfo MethodInfo { get; }
+        public MethodInfo MethodInfo { get; init; } = default!;
 
-        public List<CrudeMethodAttribute> Attributes { get; }
-
-        public CrudeMethod(MemberInfo memberInfo, MethodInfo methodInfo, List<CrudeMethodAttribute> attributes)
-        {
-            MemberInfo = memberInfo;
-            MethodInfo = methodInfo;
-            Attributes = attributes;
-        }
+        public List<CrudeMethodAttribute> Attributes { get; init; } = default!;
     }
 
-    internal class CrudeProperty
+    internal record CrudeProperty
     {
-        public string Name { get; }
+        public string Name { get; init; } = string.Empty;
 
-        public int Order { get; }
+        public int Order { get; init; }
 
-        public CrudePropertyType Type { get; }
+        public CrudePropertyType Type => Info.PropertyType.IsGenericBaseType(typeof(CrudeTable<>))
+            ? CrudePropertyType.Table
+            : CrudePropertyType.Field;
 
-        public CrudeEvent? OnClick { get; }
+        public CrudeEvent? OnClick { get; init; }
 
-        public PropertyInfo Info { get; }
+        public PropertyInfo Info { get; init; } = default!;
 
-        public object ViewModel { get; }
+        public object ViewModel { get; init; } = default!;
 
-        public bool Disabled { get; }
+        public bool Disabled { get; init; }
 
-        public bool Password { get; }
+        public bool Password { get; init; }
 
-        public bool EmptyPlaceholder { get; }
+        public bool Placeholder { get; init; }
 
-        public string HtmlLabel { get; }
+        public string HtmlLabel { get; init; } = string.Empty;
 
-        public CrudeProperty(
-            string name,
-            int order,
-            CrudeEvent? onClick,
-            PropertyInfo info,
-            object viewModel,
-            bool disabled,
-            bool password,
-            bool emptyPlaceholder,
-            string htmlLabel)
-        {
-            Name = name;
-            Order = order;
-            OnClick = onClick;
-            Info = info;
-            ViewModel = viewModel;
-            Disabled = disabled;
-            Password = password;
-            EmptyPlaceholder = emptyPlaceholder;
-            HtmlLabel = htmlLabel;
-
-            if (Info.PropertyType.IsGenericBaseType(typeof(CrudeTable<>)))
-            {
-                Type = CrudePropertyType.Table;
-            }
-            else
-            {
-                Type = CrudePropertyType.Field;
-            }
-        }
+        public int SequenceNo { get; init; }
 
         public object? GetValue()
         {

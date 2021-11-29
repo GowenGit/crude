@@ -8,12 +8,12 @@ namespace Crude.Demo.Wasm.ViewModel
     public class AdvancedLoginViewModel
     {
         [Required]
-        [CrudeEmptyPlaceholder]
+        [CrudePlaceholder]
         [EmailAddress]
         public string Email { get; set; }
 
         [CrudePassword]
-        [CrudeEmptyPlaceholder]
+        [CrudePlaceholder]
         [CrudeHtmlLabel("<a href=\"#\">Forgot your password?</a>")]
         [Required]
         [Display(Name = "Password")]

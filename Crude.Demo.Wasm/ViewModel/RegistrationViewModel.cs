@@ -9,10 +9,12 @@ namespace Crude.Demo.Wasm.ViewModel
     {
         [Required]
         [Display(Name = "Display Name")]
+        [CrudePlaceholder]
         [StringLength(20, MinimumLength = 2)]
         public string Name { get; set; }
 
         [Required]
+        [CrudePlaceholder]
         [EmailAddress]
         public string Email { get; set; }
 
