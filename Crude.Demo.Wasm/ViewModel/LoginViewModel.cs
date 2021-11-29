@@ -9,11 +9,13 @@ namespace Crude.Demo.Wasm.ViewModel
     {
         [Required]
         [EmailAddress]
+        [CrudeAutocomplete("email")]
         public string Email { get; set; }
 
         [CrudePassword]
         [Required]
         [Display(Name = "Password")]
+        [CrudeAutocomplete("current-password")]
         public string Password { get; set; }
 
         [Required]

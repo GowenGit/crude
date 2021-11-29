@@ -68,6 +68,11 @@ namespace Crude.Core.FieldFragments
                 builder.AddAttribute(seq++, "Placeholder", Property.Name);
             }
 
+            if (!string.IsNullOrWhiteSpace(Property.AutocompleteLabel))
+            {
+                builder.AddAttribute(seq++, "autocomplete", Property.AutocompleteLabel);
+            }
+
             builder.AddAttribute(seq++, "Value", ValueIsSet ? Value : Property.GetValue());
             builder.AddAttribute(seq++, "ValueChanged", valueChanged);
             builder.AddAttribute(seq++, "ValueExpression", expression);
