@@ -127,3 +127,8 @@ a:hover {
     --grid-setup: auto / auto;
     --grid-full-span: 1 / span 1
 }
+
+crude-table {
+    margin: 50px auto;
+    max-width: 830px !important;
+}

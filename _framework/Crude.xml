@@ -59,7 +59,7 @@
             Gets pagination buttons lookahead.
             </summary>
         </member>
-        <member name="M:Crude.Core.Table.CrudeTableModel`1.GetTotalElementCount">
+        <member name="M:Crude.Core.Table.CrudeTableModel`1.GetTotalElementCountAsync">
             <summary>
             Fetch total element count so we can make predictions on how to paginate table.
             </summary>
