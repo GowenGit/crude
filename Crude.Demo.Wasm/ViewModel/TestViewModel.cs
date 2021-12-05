@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace Crude.Demo.Wasm.ViewModel
 {
@@ -82,15 +83,16 @@ namespace Crude.Demo.Wasm.ViewModel
             IsSortable = true;
         }
 
-        public override ulong GetTotalElementCount()
+        public override Task<ulong> GetTotalElementCountAsync()
         {
-            return 27;
+            return Task.FromResult(27UL);
         }
 
-        public override IEnumerable<TestTableViewModel> GetElements()
+        public override Task<IEnumerable<TestTableViewModel>> GetElementsAsync()
         {
             Console.WriteLine(UnescapedSearchTerm);
-            return Rows;
+
+            return Task.FromResult(Rows);
         }
     }
 

@@ -1,9 +1,10 @@
 ﻿using Crude.Core.Fragments;
-using Crude.Core.Models;
 using Crude.Core.Parsers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Crude.Core.Table
 {
@@ -12,16 +13,23 @@ namespace Crude.Core.Table
     {
         private readonly CrudeTableModel<T> _table;
 
+        private IEnumerable<T> _elements = Array.Empty<T>();
+
+        private ulong _elementCount;
+
         public CrudeTableFragment(CrudeTableModel<T> table)
         {
             _table = table;
         }
 
+        public async Task LoadData()
+        {
+            _elements = await _table.GetElementsAsync();
+            _elementCount = await _table.GetTotalElementCountAsync();
+        }
+
         public RenderFragment Render(RenderContext context) => builder =>
         {
-            var elements = _table.GetElements();
-            var elementCount = _table.GetTotalElementCount();
-
             var seq = 0;
 
             builder.OpenElement(seq++, "crude-table");
@@ -53,11 +61,11 @@ namespace Crude.Core.Table
             {
                 builder.OpenElement(seq++, "th");
 
-                CrudeEvent? sortEvent = null;
+                Action? sortEvent = null;
 
                 if (_table.IsSortable)
                 {
-                    sortEvent = new CrudeEvent(() =>
+                    sortEvent = () =>
                     {
                         if (_table.SortColumn == item.Info.Name)
                         {
@@ -68,10 +76,10 @@ namespace Crude.Core.Table
                             _table.SortColumn = item.Info.Name;
                             _table.SortDescending = false;
                         }
-                    });
+                    };
                 }
 
-                var header = new ActionDecoratorFragment(item.Name, sortEvent);
+                var header = new ActionDecoratorFragment(item.Name, CreateCallback(context, sortEvent));
 
                 builder.AddContent(seq++, header.Render(context));
 
@@ -90,7 +98,7 @@ namespace Crude.Core.Table
 
             builder.OpenElement(seq++, "tbody");
 
-            foreach (var element in elements)
+            foreach (var element in _elements)
             {
                 builder.OpenElement(seq++, "tr");
 
@@ -110,11 +118,11 @@ namespace Crude.Core.Table
 
             builder.CloseElement();
 
-            if (elementCount > _table.TablePageSize)
+            if (_elementCount > _table.TablePageSize)
             {
                 builder.OpenElement(seq++, "crude-table-fragment-footer");
 
-                BuildPaginationButtons(ref seq, elementCount, context, builder);
+                BuildPaginationButtons(ref seq, _elementCount, context, builder);
 
                 builder.CloseElement();
             }
@@ -207,12 +215,12 @@ namespace Crude.Core.Table
             builder.AddContent(seq++, button.Render(context));
         }
 
-        private static IFragment CreateButtonFragment(string name, Action action, string cssClass, bool disabled, RenderContext context)
+        private IFragment CreateButtonFragment(string name, Action action, string cssClass, bool disabled, RenderContext context)
         {
-            return new ButtonFragment(name, context.CreateEvent(action), cssClass, disabled);
+            return new ButtonFragment(name, CreateCallback(context, action)!.Value, cssClass, disabled);
         }
 
-        private static RenderFragment GetValue(CrudeProperty property, RenderContext context)
+        private RenderFragment GetValue(CrudeProperty property, RenderContext context)
         {
             string value;
 
@@ -229,9 +237,26 @@ namespace Crude.Core.Table
                     break;
             }
 
-            var fragment = new ActionDecoratorFragment(value, property.OnClick);
+            var action = property.OnClick?.Callback;
+
+            var fragment = new ActionDecoratorFragment(value, CreateCallback(context, action));
 
             return fragment.Render(context);
+        }
+
+        private EventCallback? CreateCallback(RenderContext context, Action? action)
+        {
+            if (action == null)
+            {
+                return null;
+            }
+
+            return context.CreateEvent(async () =>
+            {
+                action.Invoke();
+
+                await LoadData();
+            });
         }
     }
 }

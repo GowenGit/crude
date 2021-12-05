@@ -1,5 +1,4 @@
-﻿using Crude.Core.Models;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 
 namespace Crude.Core.Fragments
 {
@@ -7,9 +6,9 @@ namespace Crude.Core.Fragments
     {
         private readonly string _value;
 
-        private readonly CrudeEvent? _event;
+        private readonly EventCallback? _event;
 
-        internal ActionDecoratorFragment(string value, CrudeEvent? crudeEvent)
+        internal ActionDecoratorFragment(string value, EventCallback? crudeEvent)
         {
             _value = value;
             _event = crudeEvent;
@@ -28,7 +27,7 @@ namespace Crude.Core.Fragments
 
             builder.OpenElement(seq++, "a");
 
-            builder.AddAttribute(seq++, "onclick", context.CreateEvent(_event.Callback));
+            builder.AddAttribute(seq++, "onclick", _event);
             builder.AddAttribute(seq++, "onclick:preventDefault", "true");
             builder.AddAttribute(seq++, "onclick:stopPropagation", "true");
 

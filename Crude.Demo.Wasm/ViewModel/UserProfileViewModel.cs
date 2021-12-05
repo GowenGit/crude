@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Crude.Demo.Wasm.ViewModel
 {
@@ -36,13 +37,6 @@ namespace Crude.Demo.Wasm.ViewModel
         [Display(Name = "Balance (USD)")]
         public int? Balance { get; set; }
 
-        public OwnedItemTable Items { get; }
-
-        public UserProfileViewModel(DummyDataService dummyDataService)
-        {
-            Items = new OwnedItemTable(dummyDataService);
-        }
-
         [CrudeOnSubmit("Save")]
         private void OnSave(EditContext context)
         {
@@ -71,14 +65,14 @@ namespace Crude.Demo.Wasm.ViewModel
             _dummyDataService = dummyDataService;
         }
 
-        public override ulong GetTotalElementCount()
+        public override Task<ulong> GetTotalElementCountAsync()
         {
-            return (ulong)GetElementsInternal(0, int.MaxValue).Count();
+            return Task.FromResult((ulong)GetElementsInternal(0, int.MaxValue).Count());
         }
 
-        public override IEnumerable<UserItemViewModel> GetElements()
+        public override Task<IEnumerable<UserItemViewModel>> GetElementsAsync()
         {
-            return GetElementsInternal((int)Page, (int)TablePageSize);
+            return Task.FromResult(GetElementsInternal((int)Page, (int)TablePageSize));
         }
 
         private IEnumerable<UserItemViewModel> GetElementsInternal(int pageIndex, int size)

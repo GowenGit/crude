@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Crude.Core.Formatters;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -44,6 +45,11 @@ namespace Crude.Core
         public EventCallback CreateEvent(Action action)
         {
             return EventCallback.Factory.Create(Receiver, action);
+        }
+
+        public EventCallback CreateEvent(Func<Task> func)
+        {
+            return EventCallback.Factory.Create(Receiver, func);
         }
     }
 }

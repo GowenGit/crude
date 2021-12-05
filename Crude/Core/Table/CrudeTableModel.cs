@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 #pragma warning disable SA1623
 
@@ -60,8 +61,8 @@ namespace Crude.Core.Table
         /// <summary>
         /// Fetch total element count so we can make predictions on how to paginate table.
         /// </summary>
-        public abstract ulong GetTotalElementCount();
+        public abstract Task<ulong> GetTotalElementCountAsync();
 
-        public abstract IEnumerable<T> GetElements();
+        public abstract Task<IEnumerable<T>> GetElementsAsync();
     }
 }

@@ -13,11 +13,14 @@
     <h2 class="main-text">Show me the code</h2>
 
     <p>
-        Let's define our root view model first. Here we use a <code>DummyDataService</code> to represent a
-        simple in memory repository we will load elements from.
+        The most important part is to implement <code>ProductTable</code>. It is a class that defines how data
+        is loaded into our table. It allows us to load elements page by page instead of loading all of our results
+        at once. Note that the following is a very crude implementation that is extremely inefficient. It uses reflection
+        to sort items and does multiple in memory reads of our whole data set. For production use we will want to offload
+        most heavy lifting of <code>GetTotalElementCountAsync()</code> and <code>GetElementsAsync()</code> to the database.
     </p>
-    
-    <CodeBlock Value="@CsharpRoot" />
+
+    <CodeBlock Value="@CsharpTableLoader" />
 
     <p>
         Now let's define a <code>ProductListingViewModel</code> that defines how individual elements
@@ -25,16 +28,6 @@
     </p>
 
     <CodeBlock Value="@CsharpViewModel" />
-
-    <p>
-        The most important part is to implement <code>ProductTable</code>. It is a class that defines how data 
-        is loaded into our table. It allows us to load elements page by page instead of loading all of our results
-        at once. Note that the following is a very crude implementation that is extremely inefficient. It uses reflection
-        to sort items and does multiple in memory reads of our whole data set. For production use we will want to offload
-        most heavy lifting of <code>GetTotalElementCount()</code> and <code>GetElements()</code> to the database.
-    </p>
-    
-    <CodeBlock Value="@CsharpTableLoader" />
 
     <p>
         And finally we add a blazor component.
@@ -46,24 +39,13 @@
 
 @code {
     private const string Html = @"
-@inject ListingViewModel ListingViewModel
+@inject ProductTable Table
 
 <div>
-    <CrudeTree ViewModel=""ListingViewModel"" />
+    <CrudeTable TItem=""ProductListingViewModel"" ViewModel=""Table"" />
 </div>";
 
-    private const string CsharpRoot = @"
-public class ListingViewModel
-{
-    public ProductTable ProductList { get; }
-
-    public ListingViewModel(DummyDataService dummyDataService)
-    {
-        ProductList = new ProductTable(dummyDataService);
-    }
-}";
-
-    private const string CsharpViewModel = @"
+        private const string CsharpViewModel = @"
 public class ProductListingViewModel
 {
     public int Id { get; }
@@ -91,31 +73,37 @@ public class ProductListingViewModel
     }
 
     [CrudeOnClick(nameof(Id))]
-    private void OnClick()
+    private async Task OnClick()
     {
+        // Some busy task
+        await Task.Delay(1000);
+
         Console.WriteLine($""Id {Id} was pressed"");
     }
 }";
 
     private const string CsharpTableLoader = @"
-public class ProductTable : CrudeTable<ProductListingViewModel>
+public class ProductTable : CrudeTableModel<ProductListingViewModel>
 {
     private readonly DummyDataService _dummyDataService;
 
     public ProductTable(DummyDataService dummyDataService)
-        : base(isSearchable: true, isSortable: true, tablePageSize: 5)
     {
+        IsSearchable = true;
+        IsSortable = true;
+        TablePageSize = 5;
+
         _dummyDataService = dummyDataService;
     }
 
-    public override ulong GetTotalElementCount()
+    public override Task<ulong> GetTotalElementCountAsync()
     {
-        return (ulong)GetElementsInternal(0, int.MaxValue).Count();
+        return Task.FromResult((ulong)GetElementsInternal(0, int.MaxValue).Count());
     }
 
-    public override IEnumerable<ProductListingViewModel> GetElements()
+    public override Task<IEnumerable<ProductListingViewModel>> GetElementsAsync()
     {
-        return GetElementsInternal((int)Page, (int)TablePageSize);
+        return Task.FromResult(GetElementsInternal((int)Page, (int)TablePageSize));
     }
 
     private IEnumerable<ProductListingViewModel> GetElementsInternal(int pageIndex, int size)
@@ -126,7 +114,7 @@ public class ProductTable : CrudeTable<ProductListingViewModel>
         if (!string.IsNullOrWhiteSpace(UnescapedSearchTerm))
         {
             products = products.Where(product => product.DisplayName
-                        .Contains(UnescapedSearchTerm, StringComparison.CurrentCultureIgnoreCase));
+                .Contains(UnescapedSearchTerm, StringComparison.CurrentCultureIgnoreCase));
         }
 
         // Sort part

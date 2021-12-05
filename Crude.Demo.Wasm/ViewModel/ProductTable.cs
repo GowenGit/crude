@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Crude.Demo.Wasm.ViewModel
 {
@@ -20,14 +21,14 @@ namespace Crude.Demo.Wasm.ViewModel
             _dummyDataService = dummyDataService;
         }
 
-        public override ulong GetTotalElementCount()
+        public override Task<ulong> GetTotalElementCountAsync()
         {
-            return (ulong)GetElementsInternal(0, int.MaxValue).Count();
+            return Task.FromResult((ulong)GetElementsInternal(0, int.MaxValue).Count());
         }
 
-        public override IEnumerable<ProductListingViewModel> GetElements()
+        public override Task<IEnumerable<ProductListingViewModel>> GetElementsAsync()
         {
-            return GetElementsInternal((int)Page, (int)TablePageSize);
+            return Task.FromResult(GetElementsInternal((int)Page, (int)TablePageSize));
         }
 
         private IEnumerable<ProductListingViewModel> GetElementsInternal(int pageIndex, int size)
@@ -99,8 +100,11 @@ namespace Crude.Demo.Wasm.ViewModel
         }
 
         [CrudeOnClick(nameof(Id))]
-        private void OnClick()
+        private async Task OnClick()
         {
+            // Some busy task
+            await Task.Delay(1000);
+
             Console.WriteLine($"Id {Id} was pressed");
         }
     }
