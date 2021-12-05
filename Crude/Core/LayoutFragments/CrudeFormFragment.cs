@@ -9,14 +9,14 @@ using System.Linq;
 
 namespace Crude.Core.LayoutFragments
 {
-    internal class CrudeTreeFragment : IFragment
+    internal class CrudeFormFragment : IFragment
     {
         public RenderFragment Render(RenderContext context) => builder =>
         {
             var seq = 0;
 
             builder.OpenComponent<EditForm>(seq++);
-            builder.AddAttribute(seq++, "class", "crude-tree");
+            builder.AddAttribute(seq++, "class", "crude-form");
             builder.AddAttribute(seq++, "EditContext", context.EditContext);
 
             var onSubmit = GetOnSubmitButton(context);
@@ -36,7 +36,7 @@ namespace Crude.Core.LayoutFragments
 
             var seq = 0;
 
-            builder.OpenElement(seq++, "crude-tree-header");
+            builder.OpenElement(seq++, "crude-form-header");
 
             builder.OpenComponent<DataAnnotationsValidator>(seq++);
             builder.CloseComponent();
@@ -53,7 +53,7 @@ namespace Crude.Core.LayoutFragments
                 builder.AddContent(seq++, fragment.Render(context));
             }
 
-            builder.OpenElement(seq++, "crude-tree-footer");
+            builder.OpenElement(seq++, "crude-form-footer");
 
             if (onSubmit != null)
             {

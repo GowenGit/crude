@@ -5,7 +5,7 @@
     --grid-full-span: 1 / span 3
 }
 
-.crude-tree {
+.crude-form {
     display: grid;
     grid-gap: 15px;
     align-items: start;
@@ -13,15 +13,19 @@
     grid-template: var(--grid-setup, auto / auto auto auto);
 }
 
-crude-tree-header {
+crude-form-header {
     grid-column: var(--grid-full-span, 1 / span 3);
 }
 
-crude-tree-footer {
+crude-form-footer {
     grid-column: var(--grid-full-span, 1 / span 3);
 }
 
 /* Tables */
+crude-table {
+    display: block;
+}
+
     crude-table table {
         width: 100%;
         border-collapse: collapse;

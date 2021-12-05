@@ -5,7 +5,7 @@ using Crude.Core.LayoutFragments;
 
 namespace Crude
 {
-    public partial class CrudeTree
+    public partial class CrudeForm
     {
         [Parameter]
         public object? ViewModel { get; set; } = new ();
@@ -15,7 +15,7 @@ namespace Crude
 
         private RenderFragment Render()
         {
-            var renderer = new CrudeTreeFragment();
+            var renderer = new CrudeFormFragment();
 
             var context = new RenderContext(this, StateHasChanged, ViewModel!, Options);
 
