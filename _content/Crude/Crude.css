@@ -13,10 +13,6 @@
     grid-template: var(--grid-setup, auto / auto auto auto);
 }
 
-crude-table-fragment {
-    grid-column: var(--grid-full-span, 1 / span 3);
-}
-
 crude-tree-header {
     grid-column: var(--grid-full-span, 1 / span 3);
 }
@@ -26,22 +22,22 @@ crude-tree-footer {
 }
 
 /* Tables */
-    crude-table-fragment table {
+    crude-table table {
         width: 100%;
         border-collapse: collapse;
     }
 
-    crude-table-fragment tr:nth-of-type(odd) {
+    crude-table tr:nth-of-type(odd) {
         background: #eee;
     }
 
-    crude-table-fragment th {
+    crude-table th {
         background: #333;
         color: white;
         font-weight: bold;
     }
 
-    crude-table-fragment td, th {
+    crude-table td, th {
         padding: 6px;
         border: 1px solid #ccc;
         text-align: left;

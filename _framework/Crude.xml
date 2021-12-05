@@ -9,57 +9,57 @@
             We use this to handle both nullable and regular value types.
             </summary>
         </member>
-        <member name="P:Crude.Core.Models.CrudeTable`1.Page">
+        <member name="P:Crude.Core.Table.CrudeTableModel`1.Page">
             <summary>
             Gets or sets current page index.
             </summary>
         </member>
-        <member name="P:Crude.Core.Models.CrudeTable`1.UnescapedSearchTerm">
+        <member name="P:Crude.Core.Table.CrudeTableModel`1.UnescapedSearchTerm">
             <summary>
             Gets or sets search term provided by the user.
             </summary>
         </member>
-        <member name="P:Crude.Core.Models.CrudeTable`1.IsSearchable">
+        <member name="P:Crude.Core.Table.CrudeTableModel`1.IsSearchable">
             <summary>
             Gets if table is searchable.
             </summary>
         </member>
-        <member name="P:Crude.Core.Models.CrudeTable`1.IsSortable">
+        <member name="P:Crude.Core.Table.CrudeTableModel`1.IsSortable">
             <summary>
             Gets if table is sortable.
             </summary>
         </member>
-        <member name="P:Crude.Core.Models.CrudeTable`1.SortColumn">
+        <member name="P:Crude.Core.Table.CrudeTableModel`1.SortColumn">
             <summary>
             Gets or sets which column to sort by.
             </summary>
         </member>
-        <member name="P:Crude.Core.Models.CrudeTable`1.SortDescending">
+        <member name="P:Crude.Core.Table.CrudeTableModel`1.SortDescending">
             <summary>
             Gets or sets if the sorting order.
             </summary>
         </member>
-        <member name="P:Crude.Core.Models.CrudeTable`1.TableSearchPlaceholder">
+        <member name="P:Crude.Core.Table.CrudeTableModel`1.TableSearchPlaceholder">
             <summary>
             Gets search placeholder.
             </summary>
         </member>
-        <member name="P:Crude.Core.Models.CrudeTable`1.TableFindButton">
+        <member name="P:Crude.Core.Table.CrudeTableModel`1.TableFindButton">
             <summary>
             Gets find button value.
             </summary>
         </member>
-        <member name="P:Crude.Core.Models.CrudeTable`1.TablePageSize">
+        <member name="P:Crude.Core.Table.CrudeTableModel`1.TablePageSize">
             <summary>
             Gets max elements in the page.
             </summary>
         </member>
-        <member name="P:Crude.Core.Models.CrudeTable`1.TablePageLookahead">
+        <member name="P:Crude.Core.Table.CrudeTableModel`1.TablePageLookahead">
             <summary>
             Gets pagination buttons lookahead.
             </summary>
         </member>
-        <member name="M:Crude.Core.Models.CrudeTable`1.GetTotalElementCount">
+        <member name="M:Crude.Core.Table.CrudeTableModel`1.GetTotalElementCount">
             <summary>
             Fetch total element count so we can make predictions on how to paginate table.
             </summary>
