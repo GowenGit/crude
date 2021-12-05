@@ -1,5 +1,5 @@
 ﻿using Crude.Core.Attributes;
-using Crude.Core.Models;
+using Crude.Core.Table;
 using Crude.Demo.Wasm.Services;
 using System;
 using System.Collections.Generic;
@@ -8,23 +8,15 @@ using System.Linq;
 
 namespace Crude.Demo.Wasm.ViewModel
 {
-    public class ListingViewModel
-    {
-        public ProductTable ProductList { get; }
-
-        public ListingViewModel(DummyDataService dummyDataService)
-        {
-            ProductList = new ProductTable(dummyDataService);
-        }
-    }
-
-    public class ProductTable : CrudeTable<ProductListingViewModel>
+    public class ProductTable : CrudeTableModel<ProductListingViewModel>
     {
         private readonly DummyDataService _dummyDataService;
 
         public ProductTable(DummyDataService dummyDataService)
-            : base(isSearchable: true, isSortable: true, tablePageSize: 5)
         {
+            IsSearchable = true;
+            IsSortable = true;
+            TablePageSize = 5;
             _dummyDataService = dummyDataService;
         }
 

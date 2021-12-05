@@ -2,28 +2,29 @@
 using Crude.Core.Models;
 using Crude.Core.Parsers;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
-using System.Linq.Expressions;
 
-namespace Crude.Core.LayoutFragments
+namespace Crude.Core.Table
 {
-    internal class TableFragment<T> : IFragment
+    internal class CrudeTableFragment<T> : IFragment
         where T : class
     {
-        private readonly CrudeTable<T> _table;
+        private readonly CrudeTableModel<T> _table;
 
-        public TableFragment(CrudeTable<T> table)
+        public CrudeTableFragment(CrudeTableModel<T> table)
         {
             _table = table;
         }
 
         public RenderFragment Render(RenderContext context) => builder =>
         {
+            var elements = _table.GetElements();
+            var elementCount = _table.GetTotalElementCount();
+
             var seq = 0;
 
-            builder.OpenElement(seq++, "crude-table-fragment");
+            builder.OpenElement(seq++, "crude-table");
 
             if (_table.IsSearchable)
             {
@@ -89,8 +90,6 @@ namespace Crude.Core.LayoutFragments
 
             builder.OpenElement(seq++, "tbody");
 
-            var elements = _table.GetElements();
-
             foreach (var element in elements)
             {
                 builder.OpenElement(seq++, "tr");
@@ -110,8 +109,6 @@ namespace Crude.Core.LayoutFragments
             builder.CloseElement();
 
             builder.CloseElement();
-
-            var elementCount = _table.GetTotalElementCount();
 
             if (elementCount > _table.TablePageSize)
             {
@@ -185,9 +182,7 @@ namespace Crude.Core.LayoutFragments
         {
             const string tableSearchButtonCss = "crude-search-button";
 
-            builder.OpenComponent<InputText>(seq++);
-
-            Expression<Func<string?>> expression = () => _table.UnescapedSearchTerm;
+            builder.OpenElement(seq++, "input");
 
             // TODO: A bug with DOM distroying elements when this event is called.
             // void OnEnter(KeyboardEventArgs e)
@@ -202,11 +197,10 @@ namespace Crude.Core.LayoutFragments
             // }
             // builder.AddAttribute(seq++, "onkeydown", (Action<KeyboardEventArgs>)OnEnter);
             builder.AddAttribute(seq++, "Placeholder", _table.TableSearchPlaceholder);
-            builder.AddAttribute(seq++, "Value", _table.UnescapedSearchTerm);
-            builder.AddAttribute(seq++, "ValueChanged", EventCallback.Factory.Create<string>(this, value => _table.UnescapedSearchTerm = value));
-            builder.AddAttribute(seq++, "ValueExpression", expression);
+            builder.AddAttribute(seq++, "value", BindConverter.FormatValue(_table.UnescapedSearchTerm));
+            builder.AddAttribute(seq++, "onchange", EventCallback.Factory.CreateBinder<string?>(this, value => _table.UnescapedSearchTerm = value, _table.UnescapedSearchTerm));
 
-            builder.CloseComponent();
+            builder.CloseElement();
 
             var button = CreateButtonFragment(_table.TableFindButton, () => { _table.Page = 0UL; }, tableSearchButtonCss, false, context);
 
@@ -220,11 +214,6 @@ namespace Crude.Core.LayoutFragments
 
         private static RenderFragment GetValue(CrudeProperty property, RenderContext context)
         {
-            if (property.Type != CrudePropertyType.Field)
-            {
-                throw new ArgumentException($"This method can not be called for {property.Type} fragments");
-            }
-
             string value;
 
             switch (property.GetValue())

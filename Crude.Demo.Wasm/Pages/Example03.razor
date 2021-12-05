@@ -1,12 +1,12 @@
 ﻿@page "/example-tables"
 
 @inject IJSRuntime JsRuntime
-@inject ListingViewModel ListingViewModel
+@inject ProductTable Table
 
 <h1 class="main-text">Listing Items</h1>
 
 <div>
-    <CrudeTree ViewModel="ListingViewModel" />
+    <CrudeTable TItem="ProductListingViewModel" ViewModel="Table" />
 </div>
 
 <div class="content">

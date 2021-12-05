@@ -150,10 +150,6 @@ namespace Crude.Core.Parsers
 
         public int Order { get; init; }
 
-        public CrudePropertyType Type => Info.PropertyType.IsGenericBaseType(typeof(CrudeTable<>))
-            ? CrudePropertyType.Table
-            : CrudePropertyType.Field;
-
         public CrudeEvent? OnClick { get; init; }
 
         public PropertyInfo Info { get; init; } = default!;
@@ -181,11 +177,5 @@ namespace Crude.Core.Parsers
         {
             Info.SetValue(ViewModel, value);
         }
-    }
-
-    internal enum CrudePropertyType
-    {
-        Field = 0,
-        Table = 1
     }
 }

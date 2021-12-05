@@ -1,21 +1,22 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Crude.Core;
+using Crude.Core.Table;
+using Microsoft.AspNetCore.Components;
 using System.Globalization;
-using Crude.Core;
-using Crude.Core.LayoutFragments;
 
 namespace Crude
 {
-    public partial class CrudeTree
+    public partial class CrudeTable<TItem>
+        where TItem : class
     {
         [Parameter]
-        public object? ViewModel { get; set; } = new ();
+        public CrudeTableModel<TItem>? ViewModel { get; set; }
 
         [Parameter]
         public CrudeOptions Options { get; set; } = new (CultureInfo.CurrentCulture);
 
         private RenderFragment Render()
         {
-            var renderer = new CrudeTreeFragment();
+            var renderer = new CrudeTableFragment<TItem>(ViewModel!);
 
             var context = new RenderContext(this, StateHasChanged, ViewModel!, Options);
 

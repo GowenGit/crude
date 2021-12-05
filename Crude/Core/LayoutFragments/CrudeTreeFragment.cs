@@ -4,7 +4,6 @@ using Crude.Core.Models;
 using Crude.Core.Parsers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -49,24 +48,9 @@ namespace Crude.Core.LayoutFragments
 
             foreach (var item in items)
             {
-                if (item.Type == CrudePropertyType.Field)
-                {
-                    var fragment = CreateFieldFragment(item);
+                var fragment = new FieldGroupFragment(item);
 
-                    builder.AddContent(seq++, fragment.Render(context));
-                }
-
-                if (item.Type == CrudePropertyType.Table)
-                {
-                    var fragment = CreateTableFragment(item);
-
-                    if (fragment == null)
-                    {
-                        continue;
-                    }
-
-                    builder.AddContent(seq++, fragment.Render(context));
-                }
+                builder.AddContent(seq++, fragment.Render(context));
             }
 
             builder.OpenElement(seq++, "crude-tree-footer");
@@ -88,37 +72,6 @@ namespace Crude.Core.LayoutFragments
 
             builder.CloseElement();
         };
-
-        private static FieldGroupFragment CreateFieldFragment(CrudeProperty property)
-        {
-            if (property.Type != CrudePropertyType.Field)
-            {
-                throw new ArgumentException($"This method can not be called for {property.Type} fragments");
-            }
-
-            return new FieldGroupFragment(property);
-        }
-
-        private static IFragment? CreateTableFragment(CrudeProperty property)
-        {
-            if (property.Type != CrudePropertyType.Table)
-            {
-                throw new ArgumentException($"This method can not be called for {property.Type} fragments");
-            }
-
-            var viewModelType = property.Info.PropertyType.BaseType?.GetGenericArguments()[0];
-
-            if (viewModelType == null)
-            {
-                throw new ArgumentException($"Could not resolve view model type for property {property.Name}");
-            }
-
-            var type = typeof(TableFragment<>).MakeGenericType(viewModelType);
-
-            var fragment = Activator.CreateInstance(type, property.GetValue());
-
-            return (IFragment?)fragment;
-        }
 
         private static IEnumerable<CrudeButton> GetOnClickButtons(RenderContext context)
         {

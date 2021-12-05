@@ -14,7 +14,7 @@ namespace Crude.Core.LayoutFragments
     {
         private readonly CrudeProperty _property;
 
-        private static readonly HashSet<Type> NumericTypes = new HashSet<Type>
+        private static readonly HashSet<Type> NumericTypes = new ()
         {
             typeof(int),
             typeof(double),
@@ -29,7 +29,7 @@ namespace Crude.Core.LayoutFragments
             typeof(float)
         };
 
-        private static readonly HashSet<Type> DateTypes = new HashSet<Type>
+        private static readonly HashSet<Type> DateTypes = new ()
         {
             typeof(DateTime),
             typeof(DateTimeOffset)
@@ -78,11 +78,6 @@ namespace Crude.Core.LayoutFragments
 
         private static FieldFragment Create(CrudeProperty property)
         {
-            if (property.Type != CrudePropertyType.Field)
-            {
-                throw new ArgumentException($"This method can not be called for {property.Type} fragments");
-            }
-
             var type = property.Info.PropertyType;
 
             var unwrappedType = type.UnwrapNullable();

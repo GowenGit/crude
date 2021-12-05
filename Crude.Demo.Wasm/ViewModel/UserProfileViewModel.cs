@@ -1,5 +1,5 @@
 ﻿using Crude.Core.Attributes;
-using Crude.Core.Models;
+using Crude.Core.Table;
 using Crude.Demo.Wasm.Services;
 using Microsoft.AspNetCore.Components.Forms;
 using System;
@@ -59,13 +59,15 @@ namespace Crude.Demo.Wasm.ViewModel
     /// <summary>
     /// Very inefficient implementation.
     /// </summary>
-    public class OwnedItemTable : CrudeTable<UserItemViewModel>
+    public class OwnedItemTable : CrudeTableModel<UserItemViewModel>
     {
         private readonly DummyDataService _dummyDataService;
 
         public OwnedItemTable(DummyDataService dummyDataService)
-            : base(isSearchable: false, isSortable: true, tablePageSize: 10)
         {
+            IsSearchable = false;
+            IsSortable = true;
+            TablePageSize = 10;
             _dummyDataService = dummyDataService;
         }
 

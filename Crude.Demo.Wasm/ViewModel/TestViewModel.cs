@@ -1,5 +1,5 @@
 ﻿using Crude.Core.Attributes;
-using Crude.Core.Models;
+using Crude.Core.Table;
 using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Collections.Generic;
@@ -23,8 +23,6 @@ namespace Crude.Demo.Wasm.ViewModel
 
         [Display(Name = "Floating")]
         public double DoubleFieldOne { get; set; } = 1.2;
-
-        public TestTable TableFieldOne { get; set; } = new TestTable();
 
         public double? DoubleFieldTwo { get; set; } = null;
 
@@ -69,7 +67,7 @@ namespace Crude.Demo.Wasm.ViewModel
         }
     }
 
-    public class TestTable : CrudeTable<TestTableViewModel>
+    public class TestTable : CrudeTableModel<TestTableViewModel>
     {
         private static readonly IEnumerable<TestTableViewModel> Rows = new[]
         {
@@ -78,7 +76,11 @@ namespace Crude.Demo.Wasm.ViewModel
             new TestTableViewModel()
         };
 
-        public TestTable() : base(true, true) { }
+        public TestTable()
+        {
+            IsSearchable = true;
+            IsSortable = true;
+        }
 
         public override ulong GetTotalElementCount()
         {
