@@ -21,7 +21,7 @@ namespace Crude
         {
             _renderer = new CrudeTableFragment<TItem>(ViewModel!);
 
-            await _renderer.LoadData();
+            await Load();
         }
 
         private RenderFragment Render()
@@ -29,6 +29,11 @@ namespace Crude
             var context = new RenderContext(this, StateHasChanged, ViewModel!, Options);
 
             return _renderer!.Render(context);
+        }
+
+        public async Task Load()
+        {
+            await _renderer!.LoadData();
         }
     }
 }
