@@ -65,7 +65,7 @@ namespace Crude.Core.FieldFragments
 
             if (Property.Placeholder)
             {
-                builder.AddAttribute(seq++, "Placeholder", Property.Name);
+                builder.AddAttribute(seq++, "Placeholder", string.IsNullOrWhiteSpace(Property.PlaceholderText) ? Property.Name : Property.PlaceholderText);
             }
 
             if (!string.IsNullOrWhiteSpace(Property.AutocompleteLabel))

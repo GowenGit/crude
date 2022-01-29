@@ -58,7 +58,14 @@ namespace Crude.Core.Parsers
 
                 var autocompleteLabel = autocompleteAttribute?.Name ?? string.Empty;
 
-                var placeholder = attributes.FirstOrDefault(x => x is CrudePlaceholderAttribute) is CrudePlaceholderAttribute _;
+                var placeholder = false;
+                var placeholderText = string.Empty;
+
+                if (attributes.FirstOrDefault(x => x is CrudePlaceholderAttribute) is CrudePlaceholderAttribute placeholderAttribute)
+                {
+                    placeholder = true;
+                    placeholderText = placeholderAttribute.Text;
+                }
 
                 CrudeEvent? onClick = null;
 
@@ -83,6 +90,7 @@ namespace Crude.Core.Parsers
                     Disabled = disabled,
                     Password = password,
                     Placeholder = placeholder,
+                    PlaceholderText = placeholderText,
                     HtmlLabel = htmlLabel,
                     AutocompleteLabel = autocompleteLabel
                 });
@@ -161,6 +169,8 @@ namespace Crude.Core.Parsers
         public bool Password { get; init; }
 
         public bool Placeholder { get; init; }
+
+        public string PlaceholderText { get; init; } = string.Empty;
 
         public string HtmlLabel { get; init; } = string.Empty;
 

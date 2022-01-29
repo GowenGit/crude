@@ -54,7 +54,7 @@ public class RegistrationViewModel
 
     [Required]
     [EmailAddress]
-    [CrudePlaceholder]
+    [CrudePlaceholder(""example@email.com"")]
     public string Email { get; set; }
 
     [CrudePassword]

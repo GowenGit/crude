@@ -14,7 +14,7 @@ namespace Crude.Demo.Wasm.ViewModel
         public string Name { get; set; }
 
         [Required]
-        [CrudePlaceholder]
+        [CrudePlaceholder("example@email.com")]
         [EmailAddress]
         public string Email { get; set; }
 
